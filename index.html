@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="Calculadora de cesta básica com margem de lucro, histórico e exportação CSV. Funciona offline.">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Cesta Básica">
     <title>Minha Cesta Básica</title>
     <style>
         :root {
@@ -15,6 +23,7 @@
             --success-bg: #dcfce7;
             --success-text: #166534;
             --danger: #ef4444;
+            --danger-bg: #fee2e2;
             --border: #e2e8f0;
         }
 
@@ -28,7 +37,7 @@
             background-color: var(--bg-body);
             margin: 0;
             padding: 0;
-            padding-bottom: 260px;
+            padding-bottom: 280px;
             color: var(--text-main);
         }
 
@@ -48,7 +57,7 @@
 
         .header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
 
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 
         .btn-header {
             background: rgba(255,255,255,0.2);
@@ -56,16 +65,18 @@
             border: none;
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 4px;
             transition: background 0.2s;
         }
 
         .btn-header:active { background: rgba(255,255,255,0.4); }
+        .btn-header:focus-visible { outline: 2px solid white; outline-offset: 2px; }
 
         /* Formulário (Oculto por padrão) */
         .form-container {
@@ -74,7 +85,7 @@
             margin: 10px;
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            animation: slideDown 0.3s ease-out; 
+            animation: slideDown 0.3s ease-out;
         }
 
         .form-container.hidden { display: none; }
@@ -94,29 +105,41 @@
 
         .btn-add {
             width: 100%; padding: 14px; background: var(--primary); color: white;
-            border: none; border-radius: 8px; font-size: 1.05rem; font-weight: bold; margin-top: 5px;
+            border: none; border-radius: 8px; font-size: 1.05rem; font-weight: bold; margin-top: 5px; cursor: pointer;
         }
         .btn-add:active { background: #1d4ed8; }
+        .btn-add:focus-visible { outline: 2px solid #1e3a8a; outline-offset: 2px; }
 
         /* Lista de Itens */
         .list-container { padding: 0 10px; }
 
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+
         .item-card {
             background: var(--bg-card);
-            padding: 12px 10px; 
+            padding: 12px 8px 12px 10px;
             margin-bottom: 8px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             transition: all 0.2s;
+            cursor: pointer;
         }
+
+        .item-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
         .item-card.checked { opacity: 0.6; background: #f8fafc; }
         .item-card.checked .item-info { text-decoration: line-through; color: var(--text-light); }
 
         /* Checkbox customizado */
-        .checkbox-wrapper { margin-right: 10px; display: flex; align-items: center; justify-content: center; }
+        .checkbox-wrapper { margin-right: 8px; display: flex; align-items: center; justify-content: center; }
         .custom-check {
             width: 24px; height: 24px; border: 2px solid var(--border);
             border-radius: 6px; display: flex; align-items: center; justify-content: center;
@@ -125,59 +148,61 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 14px; }
 
-        /* Fontes ajustadas para 14px e 12px */
-        .item-info { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: row; 
-            flex-wrap: wrap; 
-            align-items: baseline; 
-            margin-right: 5px; 
-            gap: 4px; 
+        /* Conteúdo com Fonte 20px */
+        .item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: baseline;
+            margin-right: 5px;
+            gap: 4px;
         }
 
-        .item-name { 
-            font-weight: 600; 
-            font-size: 14px; /* Ajustado */
-            color: var(--text-main); 
-            line-height: 1.2;
+        .item-name {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text-main);
+            line-height: 1.1;
         }
 
-        .item-details { 
-            font-size: 12px; /* Ajustado */
-            color: var(--text-light); 
+        .item-details {
+            font-size: 18px;
+            color: var(--text-light);
             font-weight: 500;
-            line-height: 1.2;
+            line-height: 1.1;
         }
 
-        .item-price { 
-            font-weight: bold; 
-            font-size: 14px; /* Ajustado */
-            color: var(--text-main); 
-            margin-right: 8px; 
-            min-width: 65px; /* Reduzido sutilmente para acompanhar a fonte */
-            text-align: right; 
+        .item-price {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text-main);
+            margin-right: 8px;
+            min-width: 85px;
+            text-align: right;
         }
 
-        /* Botões Lado a Lado */
-        .item-actions { 
-            display: flex; 
-            flex-direction: row; 
-            gap: 4px; 
+        /* Botões Lado a Lado maiores */
+        .item-actions {
+            display: flex;
+            flex-direction: row;
+            gap: 6px;
             align-items: center;
+            padding-right: 2px;
         }
-        
+
         .btn-icon {
-            background: #f1f5f9; 
-            border: none; 
+            background: #f1f5f9;
+            border: none;
             border-radius: 6px;
-            font-size: 0.9rem; /* Ajustado para combinar com a fonte 14px */
-            padding: 6px; 
+            font-size: 1.1rem;
+            padding: 8px 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+        .btn-icon:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
         .btn-edit { color: var(--primary); }
         .btn-delete { color: var(--danger); }
 
@@ -196,7 +221,29 @@
             display: flex; justify-content: space-between; align-items: center;
             background: #f1f5f9; padding: 8px 12px; border-radius: 8px; margin-bottom: 10px;
         }
-        .markup-row label { font-weight: bold; font-size: 0.95rem; }
+        .markup-row label { font-weight: bold; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .markup-suggested {
+            color: var(--success-text);
+            background: var(--success-bg);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--success);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: help;
+            text-decoration: dotted underline var(--success);
+            text-underline-offset: 3px;
+        }
+        .markup-suggested small {
+            font-weight: 600;
+            font-size: 0.68rem;
+            opacity: 0.85;
+            text-transform: lowercase;
+        }
+        .markup-suggested:active { transform: scale(0.97); }
         .markup-row input {
             width: 75px; padding: 8px; border: 1px solid var(--border);
             border-radius: 6px; font-size: 16px; text-align: center; font-weight: bold;
@@ -204,39 +251,39 @@
 
         .counts-row {
             display: flex; justify-content: space-between;
-            font-size: 0.85rem; color: var(--text-light);
+            font-size: 0.9rem; color: var(--text-light);
             font-weight: 600; margin-bottom: 8px; padding: 0 5px;
         }
 
         /* Grid de 3 colunas para Custo, Lucro e Selecionado */
-        .summary-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 6px; 
-            margin-bottom: 10px; 
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
         }
-        
-        .summary-box { 
-            background: #f8fafc; 
-            padding: 6px 4px; 
-            border-radius: 8px; 
-            text-align: center; 
+
+        .summary-box {
+            background: #f8fafc;
+            padding: 6px 4px;
+            border-radius: 8px;
+            text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
-        
-        .summary-box span { 
-            display: block; 
-            font-size: 0.7rem; 
-            color: var(--text-light); 
-            margin-bottom: 2px; 
-            font-weight: 600; 
+
+        .summary-box span {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-bottom: 2px;
+            font-weight: 600;
         }
-        
-        .summary-box strong { 
-            font-size: 0.95rem; /* Leve ajuste para caber bem os 3 quadrados */
-            color: var(--text-main); 
+
+        .summary-box strong {
+            font-size: 1rem;
+            color: var(--text-main);
         }
 
         /* Estilo específico para o quadrado de Lucro */
@@ -251,7 +298,7 @@
             border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
         }
         .total-box span { font-size: 0.95rem; font-weight: 500; }
-        .total-box strong { font-size: 1.3rem; }
+        .total-box strong { font-size: 1.4rem; }
 
         /* Modais */
         .modal-overlay {
@@ -259,7 +306,7 @@
             background: rgba(0,0,0,0.5); z-index: 50;
             display: none; justify-content: center; align-items: flex-end;
         }
-        
+
         .modal-content {
             background: white; width: 100%; max-height: 85vh;
             border-radius: 20px 20px 0 0; padding: 20px;
@@ -275,23 +322,62 @@
         }
 
         .modal-header h2 { margin: 0; font-size: 1.2rem; }
-        .btn-close { background: none; border: none; font-size: 1.5rem; color: var(--text-light); }
+        .btn-close { background: none; border: none; font-size: 1.5rem; color: var(--text-light); cursor: pointer; line-height: 1; }
+        .btn-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
 
         .history-list { overflow-y: auto; flex: 1; }
-        
+
         .history-item {
             border: 1px solid var(--border); border-radius: 8px; padding: 12px;
             margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+            gap: 10px;
         }
 
-        .history-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; }
+        .history-info { flex: 1; min-width: 0; }
+        .history-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; word-wrap: break-word; overflow-wrap: anywhere; }
         .history-info p { margin: 0; font-size: 0.85rem; color: var(--text-light); }
-        
+
+        .history-actions { display: flex; flex-direction: column; gap: 5px; min-width: 80px; }
+
         .btn-load {
             background: var(--success); color: white; border: none;
-            padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85rem;
+            padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer;
+        }
+        .btn-load:active { background: #059669; }
+        .btn-load:focus-visible { outline: 2px solid #047857; outline-offset: 2px; }
+
+        .btn-delete-history {
+            background: var(--danger-bg); color: var(--danger); border: none;
+            padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: pointer;
+        }
+        .btn-delete-history:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
+
+        /* Toast de notificação */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white; padding: 12px 20px;
+            border-radius: 8px; font-size: 0.95rem; font-weight: 600;
+            z-index: 100; opacity: 0; transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); max-width: 90vw; text-align: center;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+
+        /* Estilo de impressão */
+        @media print {
+            .header, .bottom-panel, .form-container, .item-actions, .modal-overlay, .toast { display: none !important; }
+            body { padding: 0; background: white; }
+            .item-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .list-container { padding: 0; }
         }
 
+        @media (max-width: 360px) {
+            .header h1 { font-size: 1rem; }
+            .btn-header { padding: 6px 8px; font-size: 0.8rem; }
+            .item-name, .item-price { font-size: 18px; }
+            .item-details { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -299,9 +385,10 @@
     <div class="header">
         <h1>Cesta Básica 🛒</h1>
         <div class="header-actions">
-            <button class="btn-header" id="toggleFormBtn" onclick="toggleAddForm()">➕</button>
-            <button class="btn-header" onclick="openHistory()">📁</button>
-            <button class="btn-header" onclick="saveBasket()">💾</button>
+            <button class="btn-header" id="toggleFormBtn" onclick="toggleAddForm()" aria-label="Adicionar produto">➕</button>
+            <button class="btn-header" onclick="openHistory()" aria-label="Abrir histórico">📁</button>
+            <button class="btn-header" onclick="exportCSV()" aria-label="Exportar CSV">📊</button>
+            <button class="btn-header" onclick="saveBasket()" aria-label="Salvar cesta">💾</button>
         </div>
     </div>
 
@@ -310,18 +397,18 @@
         <form id="itemForm">
             <div class="form-row">
                 <div class="input-group" style="flex: 2;">
-                    <label>Produto</label>
-                    <input type="text" id="itemName" placeholder="Ex: Arroz 5kg" required>
+                    <label for="itemName">Produto</label>
+                    <input type="text" id="itemName" placeholder="Ex: Arroz 5kg" required autocomplete="off">
                 </div>
                 <div class="input-group" style="flex: 1;">
-                    <label>Qtd</label>
+                    <label for="itemQty">Qtd</label>
                     <input type="number" id="itemQty" inputmode="numeric" min="1" value="1" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="input-group">
-                    <label>Custo Unitário (R$)</label>
-                    <input type="number" id="itemCost" inputmode="decimal" step="0.01" placeholder="0.00" required>
+                    <label for="itemCost">Custo Unitário (R$)</label>
+                    <input type="number" id="itemCost" inputmode="decimal" step="0.01" min="0" placeholder="0.00" required>
                 </div>
             </div>
             <button type="submit" class="btn-add">Adicionar Produto</button>
@@ -333,8 +420,8 @@
     <!-- Painel Inferior (Resumo) -->
     <div class="bottom-panel" id="bottomPanel">
         <div class="markup-row">
-            <label>Margem de Lucro (%)</label>
-            <input type="number" id="markupPercent" value="35" min="0" step="1" onchange="updateTotals()">
+            <label for="markupPercent"><span class="markup-suggested" id="realMarginBadge" title="Margem de lucro REAL sobre o preço de venda. Cálculo: markup ÷ (1 + markup). Ex.: markup 35% → margem 25,93%"><small>Margem Real</small> <span id="realMarginValue">25,93%</span></span> Margem de Lucro (%)</label>
+            <input type="number" id="markupPercent" value="35" step="0.01" onchange="updateTotals()" oninput="updateTotals()" inputmode="decimal" placeholder="0">
         </div>
 
         <div class="counts-row">
@@ -342,7 +429,7 @@
             <span id="countItems">Itens (un): 0</span>
         </div>
 
-        <!-- Grid com 3 colunas: Custo | Lucro | Selecionado -->
+        <!-- Grid atualizado com 3 colunas: Custo | Lucro | Selecionado -->
         <div class="summary-grid">
             <div class="summary-box">
                 <span>Custo Total</span>
@@ -365,28 +452,28 @@
     </div>
 
     <!-- Modal de Edição de Item -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal-content" style="max-height: 60vh;">
+    <div class="modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+        <div class="modal-content">
             <div class="modal-header">
-                <h2>Editar Produto</h2>
-                <button class="btn-close" onclick="closeEditModal()">✖</button>
+                <h2 id="editModalTitle">Editar Produto</h2>
+                <button class="btn-close" onclick="closeEditModal()" aria-label="Fechar">✖</button>
             </div>
             <div style="padding-bottom: 10px;">
                 <input type="hidden" id="editItemId">
                 <div class="form-row">
                     <div class="input-group" style="flex: 2;">
-                        <label>Produto</label>
-                        <input type="text" id="editItemName" required>
+                        <label for="editItemName">Produto</label>
+                        <input type="text" id="editItemName" required autocomplete="off">
                     </div>
                     <div class="input-group" style="flex: 1;">
-                        <label>Qtd</label>
+                        <label for="editItemQty">Qtd</label>
                         <input type="number" id="editItemQty" inputmode="numeric" min="1" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="input-group">
-                        <label>Custo Unitário (R$)</label>
-                        <input type="number" id="editItemCost" inputmode="decimal" step="0.01" required>
+                        <label for="editItemCost">Custo Unitário (R$)</label>
+                        <input type="number" id="editItemCost" inputmode="decimal" step="0.01" min="0" required>
                     </div>
                 </div>
                 <button class="btn-add" onclick="saveEdit()">Salvar Alterações</button>
@@ -395,18 +482,57 @@
     </div>
 
     <!-- Modal Histórico -->
-    <div class="modal-overlay" id="historyModal">
+    <div class="modal-overlay" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Minhas Cestas Salvas</h2>
-                <button class="btn-close" onclick="closeHistory()">✖</button>
+                <h2 id="historyModalTitle">Minhas Cestas Salvas</h2>
+                <button class="btn-close" onclick="closeHistory()" aria-label="Fechar">✖</button>
             </div>
             <div class="history-list" id="historyList"></div>
         </div>
     </div>
 
+    <!-- Toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-    // DADOS INICIAIS DA IMAGEM
+    // --- UTILITÁRIO: escapar HTML para evitar XSS ---
+    function escapeHTML(str) {
+        if (str == null) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    // --- UTILITÁRIO: acesso seguro ao localStorage ---
+    const storage = {
+        get(key, fallback) {
+            try {
+                const v = localStorage.getItem(key);
+                return v ? JSON.parse(v) : fallback;
+            } catch (e) {
+                console.warn('Falha ao ler localStorage:', e);
+                return fallback;
+            }
+        },
+        set(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.warn('Falha ao gravar localStorage:', e);
+                return false;
+            }
+        },
+        remove(key) {
+            try { localStorage.removeItem(key); } catch (e) { /* noop */ }
+        }
+    };
+
+    // DADOS INICIAIS
     const initialItems = [
         { id: 1, name: "Açúcar 1kg", qty: 2, cost: 3.85, checked: false },
         { id: 2, name: "Arroz 1kg", qty: 4, cost: 3.89, checked: false },
@@ -428,21 +554,57 @@
         { id: 18, name: "Vinagre 500ml", qty: 1, cost: 1.55, checked: false }
     ];
 
-    let items = JSON.parse(JSON.stringify(initialItems));
-    let nextId = 19;
+    // Carrega estado salvo (auto-save) ou usa dados iniciais
+    let savedState = storage.get('cestaCurrentState', null);
+    let items, nextId, currentMarkup;
+    if (savedState && Array.isArray(savedState.items)) {
+        items = savedState.items;
+        nextId = savedState.nextId || (Math.max(0, ...items.map(i => i.id)) + 1);
+        currentMarkup = savedState.markup != null ? savedState.markup : 35;
+    } else {
+        items = JSON.parse(JSON.stringify(initialItems));
+        nextId = 19;
+        currentMarkup = 35;
+    }
+
+    // Aplica markup carregado ao campo
+    document.getElementById('markupPercent').value = currentMarkup;
+
+    // --- AUTO-SAVE ---
+    function autoSave() {
+        storage.set('cestaCurrentState', {
+            items: items,
+            nextId: nextId,
+            markup: parseFloat(document.getElementById('markupPercent').value) || 0
+        });
+    }
+
+    // --- TOAST ---
+    let toastTimer = null;
+    function showToast(message, type = '') {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast show ' + type;
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            toast.className = 'toast ' + type;
+        }, 2500);
+    }
 
     // --- MOSTRAR / OCULTAR FORMULÁRIO ---
     function toggleAddForm() {
         const form = document.getElementById('addFormContainer');
         const btn = document.getElementById('toggleFormBtn');
-        
+
         if (form.classList.contains('hidden')) {
             form.classList.remove('hidden');
-            btn.innerText = '✖'; 
-            document.getElementById('itemName').focus(); 
+            btn.innerText = '✖';
+            btn.setAttribute('aria-label', 'Fechar formulário');
+            setTimeout(() => document.getElementById('itemName').focus(), 50);
         } else {
             form.classList.add('hidden');
-            btn.innerText = '➕'; 
+            btn.innerText = '➕';
+            btn.setAttribute('aria-label', 'Adicionar produto');
         }
     }
 
@@ -467,52 +629,69 @@
         const qty = parseInt(document.getElementById('itemQty').value);
         const cost = parseFloat(document.getElementById('itemCost').value);
 
-        if (!name || isNaN(qty) || isNaN(cost) || qty <= 0 || cost <= 0) {
-            alert('Preencha os campos corretamente.');
+        if (!name) {
+            showToast('Informe o nome do produto.', 'error');
+            return;
+        }
+        if (isNaN(qty) || qty <= 0) {
+            showToast('Quantidade inválida.', 'error');
+            return;
+        }
+        if (isNaN(cost) || cost < 0) {
+            showToast('Custo unitário inválido.', 'error');
             return;
         }
 
         items.push({ id: nextId++, name: name, qty: qty, cost: cost, checked: false });
-        
+
         document.getElementById('itemName').value = '';
         document.getElementById('itemQty').value = '1';
         document.getElementById('itemCost').value = '';
-        
-        toggleAddForm(); 
+
+        toggleAddForm();
         renderList();
+        autoSave();
+        showToast('Produto adicionado.', 'success');
     });
 
     // --- MARCAR / DELETAR ---
     function toggleCheck(id) {
         const item = items.find(i => i.id === id);
-        if (item) { item.checked = !item.checked; renderList(); }
+        if (item) {
+            item.checked = !item.checked;
+            renderList();
+            autoSave();
+        }
     }
 
     function deleteItem(id, event) {
         event.stopPropagation();
-        if(confirm("Excluir este produto da lista?")) {
+        if (confirm("Excluir este produto da lista?")) {
             items = items.filter(item => item.id !== id);
             renderList();
+            autoSave();
+            showToast('Produto excluído.');
         }
     }
 
     // --- EDITAR ITEM ---
     function editItem(id, event) {
-        event.stopPropagation(); 
+        event.stopPropagation();
         const item = items.find(i => i.id === id);
-        
+
         if (item) {
             document.getElementById('editItemId').value = item.id;
             document.getElementById('editItemName').value = item.name;
             document.getElementById('editItemQty').value = item.qty;
             document.getElementById('editItemCost').value = item.cost;
-            
-            document.getElementById('editModal').style.display = 'flex';
+
+            openModal('editModal');
+            setTimeout(() => document.getElementById('editItemName').focus(), 50);
         }
     }
 
     function closeEditModal() {
-        document.getElementById('editModal').style.display = 'none';
+        closeModal('editModal');
     }
 
     function saveEdit() {
@@ -521,19 +700,20 @@
         const qty = parseInt(document.getElementById('editItemQty').value);
         const cost = parseFloat(document.getElementById('editItemCost').value);
 
-        if (!name || isNaN(qty) || isNaN(cost) || qty <= 0 || cost <= 0) {
-            alert('Preencha os campos corretamente.');
-            return;
-        }
+        if (!name) { showToast('Informe o nome do produto.', 'error'); return; }
+        if (isNaN(qty) || qty <= 0) { showToast('Quantidade inválida.', 'error'); return; }
+        if (isNaN(cost) || cost < 0) { showToast('Custo unitário inválido.', 'error'); return; }
 
         const index = items.findIndex(i => i.id === id);
         if (index !== -1) {
             items[index].name = name;
             items[index].qty = qty;
             items[index].cost = cost;
-            
+
             closeEditModal();
-            renderList(); 
+            renderList();
+            autoSave();
+            showToast('Alterações salvas.', 'success');
         }
     }
 
@@ -546,22 +726,44 @@
         const listContainer = document.getElementById('itemList');
         listContainer.innerHTML = '';
 
+        if (items.length === 0) {
+            listContainer.innerHTML = `
+                <div class="empty-state">
+                    <span class="icon">🛒</span>
+                    <strong>Lista vazia</strong><br>
+                    Toque em ➕ para adicionar produtos.
+                </div>
+            `;
+            updateTotals();
+            return;
+        }
+
         items.forEach(item => {
             const itemTotal = item.cost * item.qty;
             const card = document.createElement('div');
             card.className = `item-card ${item.checked ? 'checked' : ''}`;
+            card.setAttribute('role', 'checkbox');
+            card.setAttribute('aria-checked', item.checked ? 'true' : 'false');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `${item.name}, ${item.qty} un x ${formatCurrency(item.cost)}, total ${formatCurrency(itemTotal)}`);
             card.onclick = () => toggleCheck(item.id);
+            card.onkeydown = (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    toggleCheck(item.id);
+                }
+            };
 
             card.innerHTML = `
                 <div class="checkbox-wrapper"><div class="custom-check"></div></div>
                 <div class="item-info">
-                    <span class="item-name">${item.name}</span>
+                    <span class="item-name">${escapeHTML(item.name)}</span>
                     <span class="item-details">- ${item.qty} un x ${formatCurrency(item.cost)}</span>
                 </div>
                 <div class="item-price">${formatCurrency(itemTotal)}</div>
                 <div class="item-actions">
-                    <button class="btn-icon btn-edit" onclick="editItem(${item.id}, event)">✏️</button>
-                    <button class="btn-icon btn-delete" onclick="deleteItem(${item.id}, event)">✖</button>
+                    <button class="btn-icon btn-edit" onclick="editItem(${item.id}, event)" aria-label="Editar ${escapeHTML(item.name)}">✏️</button>
+                    <button class="btn-icon btn-delete" onclick="deleteItem(${item.id}, event)" aria-label="Excluir ${escapeHTML(item.name)}">✖</button>
                 </div>
             `;
             listContainer.appendChild(card);
@@ -571,7 +773,14 @@
     }
 
     function updateTotals() {
-        const markup = parseFloat(document.getElementById('markupPercent').value) || 0;
+        const markupInput = document.getElementById('markupPercent');
+        let markup = parseFloat(markupInput.value);
+        // Se vazio ou inválido, usa 0 internamente para o cálculo —
+        // NÃO escreve de volta no input (senão vira "050" ao digitar).
+        // A normalização para "0" acontece só no blur (onchange) mais abaixo.
+        if (isNaN(markup) || markup < 0) {
+            markup = 0;
+        }
         const multiplier = 1 + (markup / 100);
 
         let totalListCost = 0;
@@ -582,25 +791,69 @@
             const itemTotal = item.cost * item.qty;
             totalListCost += itemTotal;
             totalQuantity += item.qty;
-            
+
             if (item.checked) { selectedCost += itemTotal; }
         });
 
         const totalSellList = totalListCost * multiplier;
-        const totalProfit = totalSellList - totalListCost; 
+        const totalProfit = totalSellList - totalListCost;
 
         document.getElementById('countProducts').innerText = `Produtos: ${items.length}`;
         document.getElementById('countItems').innerText = `Itens (un): ${totalQuantity}`;
         document.getElementById('totalCostList').innerText = formatCurrency(totalListCost);
-        document.getElementById('totalProfit').innerText = formatCurrency(totalProfit); 
+        document.getElementById('totalProfit').innerText = formatCurrency(totalProfit);
         document.getElementById('selectedCost').innerText = formatCurrency(selectedCost);
         document.getElementById('totalSellList').innerText = formatCurrency(totalSellList);
+
+        // Atualiza o badge dinâmico da margem REAL sobre venda
+        const realMargin = markup > 0 ? (markup / (100 + markup)) * 100 : 0;
+        document.getElementById('realMarginValue').textContent = realMargin.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) + '%';
     }
+
+    // --- NORMALIZAÇÃO AO SAIR DO CAMPO (blur) ---
+    // Se o usuário deixar o campo vazio ou com valor inválido, normaliza para "0".
+    // Importante: isso roda SÓ no onchange (blur), nunca no oninput — por isso
+    // não atrapalha a digitação (não vira "050").
+    document.getElementById('markupPercent').addEventListener('change', function() {
+        const v = parseFloat(this.value);
+        if (isNaN(v) || v < 0) this.value = 0;
+        autoSave();
+    });
+
+    // --- MODAIS: abertura/fechamento com acesso acessível ---
+    function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Fecha modal ao clicar no overlay (fora do conteúdo)
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal(this.id);
+            }
+        });
+    });
+
+    // Fecha modais com a tecla Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (document.getElementById('editModal').style.display === 'flex') closeEditModal();
+            if (document.getElementById('historyModal').style.display === 'flex') closeHistory();
+        }
+    });
 
     // --- SALVAR E HISTÓRICO ---
     function saveBasket() {
-        if(items.length === 0) { alert("Não há itens para salvar."); return; }
-        
+        if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
+
         const defaultName = `Cesta ${new Date().toLocaleDateString('pt-BR')}`;
         const basketName = prompt("Dê um nome para esta cesta:", defaultName);
         if (!basketName) return;
@@ -610,74 +863,145 @@
 
         const newBasket = {
             id: Date.now(),
-            name: basketName,
+            name: basketName.trim(),
             date: new Date().toLocaleString('pt-BR'),
             items: JSON.parse(JSON.stringify(items)),
             markup: markup,
             totalCost: totalCost
         };
 
-        let history = JSON.parse(localStorage.getItem('cestaHistory') || '[]');
+        let history = storage.get('cestaHistory', []);
         history.push(newBasket);
-        localStorage.setItem('cestaHistory', JSON.stringify(history));
-        alert("Cesta salva com sucesso!");
+        if (storage.set('cestaHistory', history)) {
+            showToast('Cesta salva com sucesso!', 'success');
+        } else {
+            showToast('Erro ao salvar cesta.', 'error');
+        }
     }
 
     function openHistory() {
         renderHistory();
-        document.getElementById('historyModal').style.display = 'flex';
+        openModal('historyModal');
     }
 
     function closeHistory() {
-        document.getElementById('historyModal').style.display = 'none';
+        closeModal('historyModal');
     }
 
     function renderHistory() {
         const historyList = document.getElementById('historyList');
-        let history = JSON.parse(localStorage.getItem('cestaHistory') || '[]');
+        let history = storage.get('cestaHistory', []);
 
         if (history.length === 0) {
             historyList.innerHTML = '<p style="text-align:center; color: var(--text-light); padding: 20px;">Nenhuma cesta salva ainda.</p>';
             return;
         }
 
-        historyList.innerHTML = history.reverse().map(basket => `
+        // Mostra do mais recente para o mais antigo (sem mutar o array original)
+        historyList.innerHTML = [...history].reverse().map(basket => `
             <div class="history-item">
                 <div class="history-info">
-                    <h3>${basket.name}</h3>
-                    <p>Data: ${basket.date}</p>
-                    <p>Custo: ${formatCurrency(basket.totalCost)} | Margem: ${basket.markup}%</p>
+                    <h3>${escapeHTML(basket.name)}</h3>
+                    <p>Data: ${escapeHTML(basket.date)}</p>
+                    <p>Custo: ${formatCurrency(basket.totalCost)} | Margem: ${escapeHTML(String(basket.markup))}%</p>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 5px;">
+                <div class="history-actions">
                     <button class="btn-load" onclick="loadBasket(${basket.id})">Abrir</button>
-                    <button class="btn-icon btn-delete" style="padding:4px; text-align:center;" onclick="deleteBasket(${basket.id})">Excluir</button>
+                    <button class="btn-delete-history" onclick="deleteBasket(${basket.id})">Excluir</button>
                 </div>
             </div>
         `).join('');
     }
 
     function loadBasket(id) {
-        let history = JSON.parse(localStorage.getItem('cestaHistory') || '[]');
+        let history = storage.get('cestaHistory', []);
         const basket = history.find(b => b.id === id);
-        if (basket) {
-            items = JSON.parse(JSON.stringify(basket.items));
-            document.getElementById('markupPercent').value = basket.markup;
-            closeHistory();
-            renderList();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (!basket) return;
+
+        // Confirma se a lista atual não está vazia / diferente do inicial
+        const hasChanges = items.length > 0;
+        if (hasChanges && !confirm('Abrir esta cesta substituirá a lista atual. Continuar?')) {
+            return;
         }
+
+        items = JSON.parse(JSON.stringify(basket.items));
+        // Recalcula nextId para evitar colisões de ID
+        nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+        document.getElementById('markupPercent').value = basket.markup;
+        closeHistory();
+        renderList();
+        autoSave();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('Cesta carregada.', 'success');
     }
 
     function deleteBasket(id) {
-        if(!confirm("Apagar esta cesta do histórico?")) return;
-        let history = JSON.parse(localStorage.getItem('cestaHistory') || '[]');
+        if (!confirm("Apagar esta cesta do histórico?")) return;
+        let history = storage.get('cestaHistory', []);
         history = history.filter(b => b.id !== id);
-        localStorage.setItem('cestaHistory', JSON.stringify(history));
+        storage.set('cestaHistory', history);
         renderHistory();
+        showToast('Cesta excluída do histórico.');
+    }
+
+    // --- EXPORTAR CSV ---
+    function exportCSV() {
+        if (items.length === 0) { showToast('Lista vazia, nada para exportar.', 'error'); return; }
+
+        const markup = parseFloat(document.getElementById('markupPercent').value) || 0;
+        const multiplier = 1 + (markup / 100);
+
+        const rows = [
+            ['Produto', 'Quantidade', 'Custo Unitario (R$)', 'Custo Total (R$)', 'Preco Venda (R$)']
+        ];
+        items.forEach(item => {
+            const total = item.cost * item.qty;
+            const sell = total * multiplier;
+            rows.push([
+                item.name,
+                item.qty,
+                item.cost.toFixed(2).replace('.', ','),
+                total.toFixed(2).replace('.', ','),
+                sell.toFixed(2).replace('.', ',')
+            ]);
+        });
+
+        // Linha de totais
+        const totalCost = items.reduce((acc, i) => acc + i.cost * i.qty, 0);
+        const totalSell = totalCost * multiplier;
+        rows.push([]);
+        rows.push(['TOTAIS', '', '', totalCost.toFixed(2).replace('.', ','), totalSell.toFixed(2).replace('.', ',')]);
+        rows.push(['Margem (%)', '', '', '', markup.toString().replace('.', ',')]);
+
+        const csv = rows.map(r => r.map(field => {
+            const s = String(field);
+            return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+        }).join(';')).join('\n');
+
+        // BOM para Excel reconhecer UTF-8
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `cesta-basica-${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('CSV exportado.', 'success');
     }
 
     // Inicializa o app
     renderList();
+
+    // --- REGISTRO DO SERVICE WORKER (PWA / offline) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then((reg) => console.log('SW registrado:', reg.scope))
+                .catch((err) => console.warn('Falha ao registrar SW:', err));
+        });
+    }
 </script>
 
 </body>
