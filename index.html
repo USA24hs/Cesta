@@ -610,11 +610,27 @@
         }
     }
 
-    // --- ESCONDER PAINEL AO ROLAR ---
+    // --- ESCONDER PAINEL AO ROLAR (COM PROTEÇÃO PARA INPUT) ---
     let lastScrollTop = 0;
+    let isTypingMarkup = false; // Variável que controla se o usuário está digitando
     const bottomPanel = document.getElementById('bottomPanel');
+    const markupInput = document.getElementById('markupPercent');
+
+    // Detecta quando o usuário toca no campo de margem
+    markupInput.addEventListener('focus', function() {
+        isTypingMarkup = true;
+        bottomPanel.classList.remove('hidden-panel'); // Garante que o painel está visível
+    });
+
+    // Detecta quando o usuário sai do campo (fecha o teclado ou clica fora)
+    markupInput.addEventListener('blur', function() {
+        isTypingMarkup = false;
+    });
 
     window.addEventListener("scroll", function() {
+        // Se estiver digitando, não faz nada (trava o painel na tela)
+        if (isTypingMarkup) return;
+
         let st = window.pageYOffset || document.documentElement.scrollTop;
         if (st > lastScrollTop && st > 50) {
             bottomPanel.classList.add('hidden-panel');
@@ -775,7 +791,6 @@
     }
 
     function updateTotals() {
-        const markupInput = document.getElementById('markupPercent');
         let markup = parseFloat(markupInput.value);
         if (isNaN(markup) || markup < 0) {
             markup = 0;
@@ -811,7 +826,7 @@
         }) + '%';
     }
 
-    document.getElementById('markupPercent').addEventListener('change', function() {
+    markupInput.addEventListener('change', function() {
         const v = parseFloat(this.value);
         if (isNaN(v) || v < 0) this.value = 0;
         autoSave();
@@ -842,24 +857,19 @@
         }
     });
 
-    // --- SALVAR E HISTÓRICO (Com geração automática do código) ---
+    // --- SALVAR E HISTÓRICO ---
     function saveBasket() {
         if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
 
-        // Lógica do Código CB (Produtos + Itens)
-        const productCount = items.length; // Quantidade de linhas/produtos diferentes
-        const totalItemsQty = items.reduce((acc, curr) => acc + curr.qty, 0); // Soma das quantidades
-        
-        // Cria o código no formato CB + QtdProdutos + QtdItens (Ex: CB1827)
+        const productCount = items.length; 
+        const totalItemsQty = items.reduce((acc, curr) => acc + curr.qty, 0); 
         const codigoAuto = `CB${productCount}${totalItemsQty}`;
-        
-        // Nome padrão sugerido ao clicar em salvar
         const defaultName = `Cesta Básica COD: ${codigoAuto}`;
 
         const basketName = prompt("Dê um nome para esta cesta:", defaultName);
         if (!basketName) return;
 
-        const markup = document.getElementById('markupPercent').value;
+        const markup = markupInput.value;
         const totalCost = items.reduce((acc, curr) => acc + (curr.cost * curr.qty), 0);
 
         const newBasket = {
@@ -925,7 +935,7 @@
 
         items = JSON.parse(JSON.stringify(basket.items));
         nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
-        document.getElementById('markupPercent').value = basket.markup;
+        markupInput.value = basket.markup;
         closeHistory();
         renderList();
         autoSave();
@@ -969,15 +979,6 @@
 
     // Inicializa o app
     renderList();
-
-    // --- REGISTRO DO SERVICE WORKER (PWA / offline) ---
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then((reg) => console.log('SW registrado:', reg.scope))
-                .catch((err) => console.warn('Falha ao registrar SW:', err));
-        });
-    }
 </script>
 
 </body>
