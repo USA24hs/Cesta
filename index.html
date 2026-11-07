@@ -148,7 +148,7 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 14px; }
 
-        /* Fontes Ajustadas */
+        /* Conteúdo com Fontes Atualizadas (16px e 14px) */
         .item-info {
             flex: 1;
             display: flex;
@@ -161,28 +161,28 @@
 
         .item-name {
             font-weight: 700;
-            font-size: 18px; /* Ajustado */
+            font-size: 16px; /* Ajustado para 16px */
             color: var(--text-main);
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .item-details {
-            font-size: 16px; /* Ajustado */
+            font-size: 14px; /* Ajustado para 14px */
             color: var(--text-light);
             font-weight: 500;
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .item-price {
             font-weight: 700;
-            font-size: 18px; /* Ajustado para acompanhar o nome */
+            font-size: 16px; /* Ajustado para 16px */
             color: var(--text-main);
             margin-right: 8px;
-            min-width: 85px;
+            min-width: 75px;
             text-align: right;
         }
 
-        /* Botões Lado a Lado maiores */
+        /* Botões Lado a Lado */
         .item-actions {
             display: flex;
             flex-direction: row;
@@ -195,8 +195,8 @@
             background: #f1f5f9;
             border: none;
             border-radius: 6px;
-            font-size: 1.1rem;
-            padding: 8px 6px;
+            font-size: 1rem;
+            padding: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -372,12 +372,13 @@
             .list-container { padding: 0; }
         }
 
-        /* Ajustes para telas muito pequenas */
+        /* Ajuste para telas muito pequenas */
         @media (max-width: 360px) {
             .header h1 { font-size: 1rem; }
             .btn-header { padding: 6px 8px; font-size: 0.8rem; }
-            .item-name, .item-price { font-size: 16px; } 
-            .item-details { font-size: 14px; } 
+            /* Como as fontes já estão pequenas (16px/14px), mantemos a proporção */
+            .item-name, .item-price { font-size: 14px; }
+            .item-details { font-size: 12px; }
         }
     </style>
 </head>
@@ -430,7 +431,7 @@
             <span id="countItems">Itens (un): 0</span>
         </div>
 
-        <!-- Grid atualizado com 3 colunas: Custo | Lucro | Selecionado -->
+        <!-- Grid com 3 colunas: Custo | Lucro | Selecionado -->
         <div class="summary-grid">
             <div class="summary-box">
                 <span>Custo Total</span>
@@ -776,9 +777,6 @@
     function updateTotals() {
         const markupInput = document.getElementById('markupPercent');
         let markup = parseFloat(markupInput.value);
-        // Se vazio ou inválido, usa 0 internamente para o cálculo —
-        // NÃO escreve de volta no input (senão vira "050" ao digitar).
-        // A normalização para "0" acontece só no blur (onchange) mais abaixo.
         if (isNaN(markup) || markup < 0) {
             markup = 0;
         }
@@ -806,7 +804,6 @@
         document.getElementById('selectedCost').innerText = formatCurrency(selectedCost);
         document.getElementById('totalSellList').innerText = formatCurrency(totalSellList);
 
-        // Atualiza o badge dinâmico da margem REAL sobre venda
         const realMargin = markup > 0 ? (markup / (100 + markup)) * 100 : 0;
         document.getElementById('realMarginValue').textContent = realMargin.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
@@ -814,17 +811,13 @@
         }) + '%';
     }
 
-    // --- NORMALIZAÇÃO AO SAIR DO CAMPO (blur) ---
-    // Se o usuário deixar o campo vazio ou com valor inválido, normaliza para "0".
-    // Importante: isso roda SÓ no onchange (blur), nunca no oninput — por isso
-    // não atrapalha a digitação (não vira "050").
     document.getElementById('markupPercent').addEventListener('change', function() {
         const v = parseFloat(this.value);
         if (isNaN(v) || v < 0) this.value = 0;
         autoSave();
     });
 
-    // --- MODAIS: abertura/fechamento com acesso acessível ---
+    // --- MODAIS ---
     function openModal(id) {
         document.getElementById(id).style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -834,7 +827,6 @@
         document.body.style.overflow = '';
     }
 
-    // Fecha modal ao clicar no overlay (fora do conteúdo)
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', function(e) {
             if (e.target === this) {
@@ -843,7 +835,6 @@
         });
     });
 
-    // Fecha modais com a tecla Escape
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             if (document.getElementById('editModal').style.display === 'flex') closeEditModal();
@@ -898,7 +889,6 @@
             return;
         }
 
-        // Mostra do mais recente para o mais antigo (sem mutar o array original)
         historyList.innerHTML = [...history].reverse().map(basket => `
             <div class="history-item">
                 <div class="history-info">
@@ -919,14 +909,12 @@
         const basket = history.find(b => b.id === id);
         if (!basket) return;
 
-        // Confirma se a lista atual não está vazia / diferente do inicial
         const hasChanges = items.length > 0;
         if (hasChanges && !confirm('Abrir esta cesta substituirá a lista atual. Continuar?')) {
             return;
         }
 
         items = JSON.parse(JSON.stringify(basket.items));
-        // Recalcula nextId para evitar colisões de ID
         nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
         document.getElementById('markupPercent').value = basket.markup;
         closeHistory();
@@ -967,7 +955,6 @@
             ]);
         });
 
-        // Linha de totais
         const totalCost = items.reduce((acc, i) => acc + i.cost * i.qty, 0);
         const totalSell = totalCost * multiplier;
         rows.push([]);
@@ -979,7 +966,6 @@
             return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
         }).join(';')).join('\n');
 
-        // BOM para Excel reconhecer UTF-8
         const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
