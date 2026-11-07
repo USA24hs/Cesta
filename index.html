@@ -125,7 +125,7 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 14px; }
 
-        /* Conteúdo com Fonte Padrão Restaurada */
+        /* Fontes ajustadas para 14px e 12px */
         .item-info { 
             flex: 1; 
             display: flex; 
@@ -138,13 +138,13 @@
 
         .item-name { 
             font-weight: 600; 
-            font-size: 1rem; /* Tamanho padrão (16px) */
+            font-size: 14px; /* Ajustado */
             color: var(--text-main); 
             line-height: 1.2;
         }
 
         .item-details { 
-            font-size: 0.85rem; /* Fonte menor para detalhes (aprox 14px) */
+            font-size: 12px; /* Ajustado */
             color: var(--text-light); 
             font-weight: 500;
             line-height: 1.2;
@@ -152,10 +152,10 @@
 
         .item-price { 
             font-weight: bold; 
-            font-size: 1rem; /* Tamanho padrão (16px) */
+            font-size: 14px; /* Ajustado */
             color: var(--text-main); 
             margin-right: 8px; 
-            min-width: 70px; 
+            min-width: 65px; /* Reduzido sutilmente para acompanhar a fonte */
             text-align: right; 
         }
 
@@ -171,7 +171,7 @@
             background: #f1f5f9; 
             border: none; 
             border-radius: 6px;
-            font-size: 1rem; 
+            font-size: 0.9rem; /* Ajustado para combinar com a fonte 14px */
             padding: 6px; 
             cursor: pointer;
             display: flex;
@@ -235,7 +235,7 @@
         }
         
         .summary-box strong { 
-            font-size: 1rem; 
+            font-size: 0.95rem; /* Leve ajuste para caber bem os 3 quadrados */
             color: var(--text-main); 
         }
 
