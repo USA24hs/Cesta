@@ -103,7 +103,7 @@
 
         .item-card {
             background: var(--bg-card);
-            padding: 12px 8px 12px 10px; 
+            padding: 12px 10px; 
             margin-bottom: 8px;
             border-radius: 10px;
             display: flex;
@@ -116,7 +116,7 @@
         .item-card.checked .item-info { text-decoration: line-through; color: var(--text-light); }
 
         /* Checkbox customizado */
-        .checkbox-wrapper { margin-right: 8px; display: flex; align-items: center; justify-content: center; }
+        .checkbox-wrapper { margin-right: 10px; display: flex; align-items: center; justify-content: center; }
         .custom-check {
             width: 24px; height: 24px; border: 2px solid var(--border);
             border-radius: 6px; display: flex; align-items: center; justify-content: center;
@@ -125,7 +125,7 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 14px; }
 
-        /* Conteúdo com Fonte 20px */
+        /* Conteúdo com Fonte Padrão Restaurada */
         .item-info { 
             flex: 1; 
             display: flex; 
@@ -137,43 +137,42 @@
         }
 
         .item-name { 
-            font-weight: 700; 
-            font-size: 20px; 
+            font-weight: 600; 
+            font-size: 1rem; /* Tamanho padrão (16px) */
             color: var(--text-main); 
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .item-details { 
-            font-size: 18px; 
+            font-size: 0.85rem; /* Fonte menor para detalhes (aprox 14px) */
             color: var(--text-light); 
             font-weight: 500;
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .item-price { 
-            font-weight: 700; 
-            font-size: 20px; 
+            font-weight: bold; 
+            font-size: 1rem; /* Tamanho padrão (16px) */
             color: var(--text-main); 
             margin-right: 8px; 
-            min-width: 85px; 
+            min-width: 70px; 
             text-align: right; 
         }
 
-        /* Botões Lado a Lado maiores */
+        /* Botões Lado a Lado */
         .item-actions { 
             display: flex; 
             flex-direction: row; 
-            gap: 6px; 
+            gap: 4px; 
             align-items: center;
-            padding-right: 2px; 
         }
         
         .btn-icon {
             background: #f1f5f9; 
             border: none; 
             border-radius: 6px;
-            font-size: 1.1rem; 
-            padding: 8px 6px; 
+            font-size: 1rem; 
+            padding: 6px; 
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -205,21 +204,21 @@
 
         .counts-row {
             display: flex; justify-content: space-between;
-            font-size: 0.9rem; color: var(--text-light);
+            font-size: 0.85rem; color: var(--text-light);
             font-weight: 600; margin-bottom: 8px; padding: 0 5px;
         }
 
         /* Grid de 3 colunas para Custo, Lucro e Selecionado */
         .summary-grid { 
             display: grid; 
-            grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+            grid-template-columns: repeat(3, 1fr); 
             gap: 6px; 
             margin-bottom: 10px; 
         }
         
         .summary-box { 
             background: #f8fafc; 
-            padding: 6px 4px; /* Reduzido para caber 3 na tela */
+            padding: 6px 4px; 
             border-radius: 8px; 
             text-align: center; 
             display: flex;
@@ -236,7 +235,7 @@
         }
         
         .summary-box strong { 
-            font-size: 1rem; /* Fonte ligeiramente menor para caber */
+            font-size: 1rem; 
             color: var(--text-main); 
         }
 
@@ -252,7 +251,7 @@
             border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
         }
         .total-box span { font-size: 0.95rem; font-weight: 500; }
-        .total-box strong { font-size: 1.4rem; }
+        .total-box strong { font-size: 1.3rem; }
 
         /* Modais */
         .modal-overlay {
@@ -343,7 +342,7 @@
             <span id="countItems">Itens (un): 0</span>
         </div>
 
-        <!-- Grid atualizado com 3 colunas: Custo | Lucro | Selecionado -->
+        <!-- Grid com 3 colunas: Custo | Lucro | Selecionado -->
         <div class="summary-grid">
             <div class="summary-box">
                 <span>Custo Total</span>
@@ -588,12 +587,12 @@
         });
 
         const totalSellList = totalListCost * multiplier;
-        const totalProfit = totalSellList - totalListCost; // CÁLCULO DO LUCRO
+        const totalProfit = totalSellList - totalListCost; 
 
         document.getElementById('countProducts').innerText = `Produtos: ${items.length}`;
         document.getElementById('countItems').innerText = `Itens (un): ${totalQuantity}`;
         document.getElementById('totalCostList').innerText = formatCurrency(totalListCost);
-        document.getElementById('totalProfit').innerText = formatCurrency(totalProfit); // ATUALIZA O LUCRO
+        document.getElementById('totalProfit').innerText = formatCurrency(totalProfit); 
         document.getElementById('selectedCost').innerText = formatCurrency(selectedCost);
         document.getElementById('totalSellList').innerText = formatCurrency(totalSellList);
     }
