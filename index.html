@@ -148,7 +148,7 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 14px; }
 
-        /* Conteúdo com Fonte 20px */
+        /* Fontes Ajustadas */
         .item-info {
             flex: 1;
             display: flex;
@@ -161,13 +161,13 @@
 
         .item-name {
             font-weight: 700;
-            font-size: 20px;
+            font-size: 18px; /* Ajustado */
             color: var(--text-main);
             line-height: 1.1;
         }
 
         .item-details {
-            font-size: 18px;
+            font-size: 16px; /* Ajustado */
             color: var(--text-light);
             font-weight: 500;
             line-height: 1.1;
@@ -175,7 +175,7 @@
 
         .item-price {
             font-weight: 700;
-            font-size: 20px;
+            font-size: 18px; /* Ajustado para acompanhar o nome */
             color: var(--text-main);
             margin-right: 8px;
             min-width: 85px;
@@ -372,11 +372,12 @@
             .list-container { padding: 0; }
         }
 
+        /* Ajustes para telas muito pequenas */
         @media (max-width: 360px) {
             .header h1 { font-size: 1rem; }
             .btn-header { padding: 6px 8px; font-size: 0.8rem; }
-            .item-name, .item-price { font-size: 18px; }
-            .item-details { font-size: 16px; }
+            .item-name, .item-price { font-size: 16px; } 
+            .item-details { font-size: 14px; } 
         }
     </style>
 </head>
