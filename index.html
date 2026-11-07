@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2563eb">
-    <meta name="description" content="Calculadora de cesta básica com margem de lucro, histórico e exportação CSV. Funciona offline.">
+    <meta name="description" content="Calculadora de cesta básica com margem de lucro, histórico e compartilhamento. Funciona offline.">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Cesta Básica">
-    <title>Minha Cesta Básica</title>
+    <title>Martins Cesta Básica</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -25,6 +25,7 @@
             --danger: #ef4444;
             --danger-bg: #fee2e2;
             --border: #e2e8f0;
+            --whatsapp: #25D366;
         }
 
         * {
@@ -148,7 +149,7 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 14px; }
 
-        /* Conteúdo com Fontes Atualizadas (16px e 14px) */
+        /* Conteúdo com Fontes 16px e 14px */
         .item-info {
             flex: 1;
             display: flex;
@@ -161,13 +162,13 @@
 
         .item-name {
             font-weight: 700;
-            font-size: 16px; /* Ajustado para 16px */
+            font-size: 16px; 
             color: var(--text-main);
             line-height: 1.2;
         }
 
         .item-details {
-            font-size: 14px; /* Ajustado para 14px */
+            font-size: 14px; 
             color: var(--text-light);
             font-weight: 500;
             line-height: 1.2;
@@ -175,7 +176,7 @@
 
         .item-price {
             font-weight: 700;
-            font-size: 16px; /* Ajustado para 16px */
+            font-size: 16px; 
             color: var(--text-main);
             margin-right: 8px;
             min-width: 75px;
@@ -376,7 +377,6 @@
         @media (max-width: 360px) {
             .header h1 { font-size: 1rem; }
             .btn-header { padding: 6px 8px; font-size: 0.8rem; }
-            /* Como as fontes já estão pequenas (16px/14px), mantemos a proporção */
             .item-name, .item-price { font-size: 14px; }
             .item-details { font-size: 12px; }
         }
@@ -389,7 +389,7 @@
         <div class="header-actions">
             <button class="btn-header" id="toggleFormBtn" onclick="toggleAddForm()" aria-label="Adicionar produto">➕</button>
             <button class="btn-header" onclick="openHistory()" aria-label="Abrir histórico">📁</button>
-            <button class="btn-header" onclick="exportCSV()" aria-label="Exportar CSV">📊</button>
+            <button class="btn-header" onclick="shareOnWhatsApp()" aria-label="Compartilhar no WhatsApp">📲</button>
             <button class="btn-header" onclick="saveBasket()" aria-label="Salvar cesta">💾</button>
         </div>
     </div>
@@ -933,49 +933,35 @@
         showToast('Cesta excluída do histórico.');
     }
 
-    // --- EXPORTAR CSV ---
-    function exportCSV() {
-        if (items.length === 0) { showToast('Lista vazia, nada para exportar.', 'error'); return; }
+    // --- COMPARTILHAR NO WHATSAPP ---
+    function shareOnWhatsApp() {
+        if (items.length === 0) { 
+            showToast('Lista vazia, nada para compartilhar.', 'error'); 
+            return; 
+        }
 
-        const markup = parseFloat(document.getElementById('markupPercent').value) || 0;
-        const multiplier = 1 + (markup / 100);
-
-        const rows = [
-            ['Produto', 'Quantidade', 'Custo Unitario (R$)', 'Custo Total (R$)', 'Preco Venda (R$)']
-        ];
+        // Calcula a quantidade total de itens
+        let totalQuantity = 0;
         items.forEach(item => {
-            const total = item.cost * item.qty;
-            const sell = total * multiplier;
-            rows.push([
-                item.name,
-                item.qty,
-                item.cost.toFixed(2).replace('.', ','),
-                total.toFixed(2).replace('.', ','),
-                sell.toFixed(2).replace('.', ',')
-            ]);
+            totalQuantity += item.qty;
         });
 
-        const totalCost = items.reduce((acc, i) => acc + i.cost * i.qty, 0);
-        const totalSell = totalCost * multiplier;
-        rows.push([]);
-        rows.push(['TOTAIS', '', '', totalCost.toFixed(2).replace('.', ','), totalSell.toFixed(2).replace('.', ',')]);
-        rows.push(['Margem (%)', '', '', '', markup.toString().replace('.', ',')]);
+        // Monta o texto formatado (Nome e Quantidade, sem valores)
+        let text = "🛒 *Martins Cesta Básica*\n\n";
 
-        const csv = rows.map(r => r.map(field => {
-            const s = String(field);
-            return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-        }).join(';')).join('\n');
+        items.forEach(item => {
+            text += `- ${item.name} (${item.qty} un)\n`;
+        });
 
-        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `cesta-basica-${new Date().toISOString().slice(0,10)}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('CSV exportado.', 'success');
+        // Adiciona o rodapé com a contagem total de itens
+        text += `\n_Cesta Básica com Itens: *${totalQuantity}*_`;
+
+        // Codifica o texto para URL e abre o WhatsApp
+        const encodedText = encodeURIComponent(text);
+        const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+        
+        window.open(whatsappUrl, '_blank');
+        showToast('Abrindo WhatsApp...', 'success');
     }
 
     // Inicializa o app
