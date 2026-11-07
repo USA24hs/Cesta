@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Cesta Básica">
-    <title>Martins Cesta Básica</title>
+    <title>Minha Cesta Básica</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -842,11 +842,20 @@
         }
     });
 
-    // --- SALVAR E HISTÓRICO ---
+    // --- SALVAR E HISTÓRICO (Com geração automática do código) ---
     function saveBasket() {
         if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
 
-        const defaultName = `Cesta ${new Date().toLocaleDateString('pt-BR')}`;
+        // Lógica do Código CB (Produtos + Itens)
+        const productCount = items.length; // Quantidade de linhas/produtos diferentes
+        const totalItemsQty = items.reduce((acc, curr) => acc + curr.qty, 0); // Soma das quantidades
+        
+        // Cria o código no formato CB + QtdProdutos + QtdItens (Ex: CB1827)
+        const codigoAuto = `CB${productCount}${totalItemsQty}`;
+        
+        // Nome padrão sugerido ao clicar em salvar
+        const defaultName = `Cesta Básica COD: ${codigoAuto}`;
+
         const basketName = prompt("Dê um nome para esta cesta:", defaultName);
         if (!basketName) return;
 
@@ -940,23 +949,17 @@
             return; 
         }
 
-        // Calcula a quantidade total de itens
         let totalQuantity = 0;
-        items.forEach(item => {
-            totalQuantity += item.qty;
-        });
+        items.forEach(item => { totalQuantity += item.qty; });
 
-        // Monta o texto formatado (Nome e Quantidade, sem valores)
-        let text = "🛒 *Martins Cesta Básica*\n\n";
+        let text = "🛒 *Minha Cesta Básica*\n\n";
 
         items.forEach(item => {
             text += `- ${item.name} (${item.qty} un)\n`;
         });
 
-        // Adiciona o rodapé com a contagem total de itens
-        text += `\n_Cesta Básica com Itens: *${totalQuantity}*_`;
+        text += `\n_Cesta Básica Itens com: *${totalQuantity}*_`;
 
-        // Codifica o texto para URL e abre o WhatsApp
         const encodedText = encodeURIComponent(text);
         const whatsappUrl = `https://wa.me/?text=${encodedText}`;
         
