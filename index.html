@@ -682,7 +682,6 @@
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', function(e) {
             if (e.target === this) {
-                // Se for o modal de confirmação fechando pelo fundo, trata como cancelamento
                 if (this.id === 'confirmModal') {
                     closeConfirmModal(true);
                 } else {
@@ -813,7 +812,6 @@
         const basket = history.find(b => b.id === id);
         if (!basket) return;
 
-        // FECHA O HISTÓRICO ANTES DE MOSTRAR A CONFIRMAÇÃO
         closeHistory();
 
         if (items.length > 0) {
@@ -825,7 +823,6 @@
                 () => {
                     executeLoadBasket(basket);
                 },
-                // SE O USUÁRIO CANCELAR, ABRE O HISTÓRICO DE VOLTA
                 () => {
                     openHistory();
                 }
@@ -843,25 +840,35 @@
         let lim = basket.limit || 200;
         limitInput.value = lim.toFixed(2).replace('.', ',');
         
-        // O closeHistory() já foi chamado, mas garantimos que está fechado
         closeHistory(); 
         renderList(); autoSave();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         showToast('Cesta carregada.', 'success');
     }
 
+    // ==========================================
+    // EXCLUSÃO DE CESTA (CORRIGIDO)
+    // ==========================================
     function deleteBasket(id) {
+        // Fecha o histórico antes de mostrar a confirmação
+        closeHistory();
+
         showConfirm(
             'Excluir Cesta',
             'Tem certeza que deseja apagar esta cesta do histórico? Essa ação não pode ser desfeita.',
             'Excluir',
             'var(--danger)',
+            // Se confirmar: apaga e reabre o histórico com a lista atualizada
             () => {
                 let history = storage.get('cestaHistory', []);
                 history = history.filter(b => b.id !== id);
                 storage.set('cestaHistory', history); 
-                renderHistory();
+                openHistory(); 
                 showToast('Cesta excluída do histórico.', 'success');
+            },
+            // Se cancelar: apenas reabre o histórico
+            () => {
+                openHistory();
             }
         );
     }
