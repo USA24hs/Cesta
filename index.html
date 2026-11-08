@@ -369,12 +369,12 @@
         <div class="modal-content" style="max-height: 50vh;">
             <div class="modal-header">
                 <h2 id="confirmTitle">Confirmação</h2>
-                <button class="btn-close" onclick="closeConfirmModal()">✖</button>
+                <button class="btn-close" onclick="closeConfirmModal(true)">✖</button>
             </div>
             <div style="padding-bottom: 10px;">
                 <p id="confirmMessage" style="font-size: 1rem; color: var(--text-main); margin-bottom: 20px; line-height: 1.4;"></p>
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+                    <button class="btn-cancel" onclick="closeConfirmModal(true)">Cancelar</button>
                     <button class="btn-add" id="confirmBtnAction" style="box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);">Excluir</button>
                 </div>
             </div>
@@ -681,12 +681,24 @@
 
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', function(e) {
-            if (e.target === this) closeModal(this.id);
+            if (e.target === this) {
+                // Se for o modal de confirmação fechando pelo fundo, trata como cancelamento
+                if (this.id === 'confirmModal') {
+                    closeConfirmModal(true);
+                } else {
+                    closeModal(this.id);
+                }
+            }
         });
     });
 
+    // ==========================================
+    // LÓGICA DO MODAL DE CONFIRMAÇÃO GENÉRICO
+    // ==========================================
     let confirmCallback = null;
-    function showConfirm(title, message, btnText, btnColor, callback) {
+    let cancelCallback = null;
+
+    function showConfirm(title, message, btnText, btnColor, onConfirm, onCancel) {
         document.getElementById('confirmTitle').innerText = title;
         document.getElementById('confirmMessage').innerText = message;
         
@@ -697,24 +709,29 @@
         if(btnColor === 'var(--danger)') btn.style.boxShadow = '0 4px 10px rgba(239, 68, 68, 0.25)';
         else btn.style.boxShadow = '0 4px 10px rgba(37, 99, 235, 0.25)';
 
-        confirmCallback = callback;
+        confirmCallback = onConfirm;
+        cancelCallback = onCancel;
         openModal('confirmModal');
     }
 
-    function closeConfirmModal() {
+    function closeConfirmModal(isCancel = false) {
         closeModal('confirmModal');
+        if (isCancel && typeof cancelCallback === 'function') {
+            cancelCallback();
+        }
         confirmCallback = null;
+        cancelCallback = null;
     }
 
     document.getElementById('confirmBtnAction').addEventListener('click', () => {
         if (typeof confirmCallback === 'function') {
             confirmCallback();
         }
-        closeConfirmModal();
+        closeConfirmModal(false);
     });
 
     // ==========================================
-    // SALVAR CESTA COM LUCRO
+    // SALVAR CESTA
     // ==========================================
     function saveBasket() {
         if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
@@ -736,7 +753,6 @@
 
         let limitVal = parseFloat(limitInput.value.replace(',', '.')) || 0;
         
-        // Cálculo do Lucro no momento de salvar
         let markup = parseFloat(markupInput.value) || 0;
         const multiplier = 1 + (markup / 100);
         const totalCost = items.reduce((acc, curr) => acc + (curr.cost * curr.qty), 0);
@@ -749,7 +765,7 @@
             items: JSON.parse(JSON.stringify(items)),
             markup: markupInput.value, limit: limitVal,
             totalCost: totalCost,
-            totalProfit: totalProfit // Salvando o lucro
+            totalProfit: totalProfit 
         };
 
         let history = storage.get('cestaHistory', []);
@@ -766,9 +782,6 @@
     function openHistory() { renderHistory(); openModal('historyModal'); }
     function closeHistory() { closeModal('historyModal'); }
 
-    // ==========================================
-    // RENDERIZAR HISTÓRICO (CUSTO E LUCRO NA MESMA LINHA)
-    // ==========================================
     function renderHistory() {
         const historyList = document.getElementById('historyList');
         let history = storage.get('cestaHistory', []);
@@ -781,13 +794,10 @@
                 <div class="history-info">
                     <h3>${escapeHTML(basket.name)}</h3>
                     <p>${escapeHTML(basket.date)}</p>
-                    
-                    <!-- Linha única para Custo e Lucro -->
                     <div style="display: flex; gap: 12px; margin-top: 6px; font-weight: 600; font-size: 0.85rem;">
                         <span style="color: var(--primary);">Custo: ${formatCurrency(basket.totalCost)}</span>
                         <span style="color: var(--success-text);">Lucro: ${formatCurrency(basket.totalProfit || 0)}</span>
                     </div>
-
                     <p style="font-size: 0.75rem; opacity: 0.8; margin-top: 4px;">Limite: ${formatCurrency(basket.limit || 0)}</p>
                 </div>
                 <div class="history-actions">
@@ -803,6 +813,9 @@
         const basket = history.find(b => b.id === id);
         if (!basket) return;
 
+        // FECHA O HISTÓRICO ANTES DE MOSTRAR A CONFIRMAÇÃO
+        closeHistory();
+
         if (items.length > 0) {
             showConfirm(
                 'Abrir Cesta',
@@ -811,6 +824,10 @@
                 'var(--primary)',
                 () => {
                     executeLoadBasket(basket);
+                },
+                // SE O USUÁRIO CANCELAR, ABRE O HISTÓRICO DE VOLTA
+                () => {
+                    openHistory();
                 }
             );
         } else {
@@ -826,7 +843,9 @@
         let lim = basket.limit || 200;
         limitInput.value = lim.toFixed(2).replace('.', ',');
         
-        closeHistory(); renderList(); autoSave();
+        // O closeHistory() já foi chamado, mas garantimos que está fechado
+        closeHistory(); 
+        renderList(); autoSave();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         showToast('Cesta carregada.', 'success');
     }
