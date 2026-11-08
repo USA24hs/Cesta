@@ -70,23 +70,60 @@
         }
         .form-container.hidden { display: none; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
         .input-group { display: flex; flex-direction: column; flex: 1; }
         .input-group label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 2px; font-weight: 600; }
-        .input-group input { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; background: #f8fafc; }
+        
+        .input-group input { 
+            padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; background: #f8fafc;
+            width: 100%; min-width: 0; 
+        }
+        
         .btn-add { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
+
+        /* Linha de Busca e Botão Adicionar (AJUSTADO) */
+        .search-row {
+            display: flex; gap: 8px; padding: 0 8px 8px 8px; align-items: center;
+        }
+        .search-row input {
+            flex: 1; padding: 8px 15px; border: 1px solid var(--border);
+            border-radius: 20px; font-size: 14px; background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); min-width: 0;
+            height: 36px;
+        }
+        .search-row input:focus { outline: none; border-color: var(--primary); }
+        
+        /* Botão Adicionar (VERDE E MENOR) */
+        .btn-search-add {
+            background: var(--success); color: white; border: none;
+            width: 36px; height: 36px; /* Reduzido */
+            border-radius: 50%;
+            font-size: 1.1rem; /* Ajustado */
+            font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3); /* Sombra verde */
+            flex-shrink: 0; transition: transform 0.1s;
+        }
+        .btn-search-add:active { transform: scale(0.92); background: #059669; }
 
         /* Lista de Itens */
         .list-container { padding: 0 8px; }
         .empty-state { text-align: center; padding: 30px 20px; color: var(--text-light); font-size: 0.95rem; }
+        
         .item-card {
-            background: var(--bg-card); padding: 6px 8px; margin-bottom: 4px; border-radius: 8px;
-            display: flex; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-            transition: all 0.2s; cursor: pointer;
+            background: var(--bg-card); padding: 8px 10px; margin-bottom: 6px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: all 0.2s;
         }
         .item-card.checked { opacity: 0.6; background: #f8fafc; }
         .item-card.checked .item-info { text-decoration: line-through; color: var(--text-light); }
-        .checkbox-wrapper { margin-right: 6px; display: flex; align-items: center; justify-content: center; }
+        
+        .clickable-select {
+            display: flex; align-items: center; flex: 1; cursor: pointer; overflow: hidden; padding-right: 8px;
+        }
+        
+        .checkbox-wrapper { margin-right: 8px; display: flex; align-items: center; justify-content: center; }
         .custom-check {
             width: 20px; height: 20px; border: 2px solid var(--border);
             border-radius: 4px; display: flex; align-items: center; justify-content: center;
@@ -95,18 +132,17 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 12px; }
 
-        .item-info { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; margin-right: 4px; gap: 2px; }
-        .item-name { font-weight: 700; font-size: 14px; color: var(--text-main); line-height: 1.1; }
-        .item-details { font-size: 12px; color: var(--text-light); font-weight: 500; line-height: 1.1; }
-        .item-price { font-weight: 700; font-size: 14px; color: var(--text-main); margin-right: 4px; min-width: 60px; text-align: right; }
-        .item-actions { display: flex; flex-direction: row; gap: 2px; align-items: center; }
-        .btn-icon {
-            background: transparent; border: none; border-radius: 4px;
-            font-size: 0.85rem; padding: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        .item-info { 
+            display: flex; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 4px; 
         }
-        .btn-icon:active { background: #e2e8f0; }
-        .btn-edit { color: var(--primary); }
-        .btn-delete { color: var(--danger); }
+        .item-name { font-weight: 700; font-size: 14px; color: var(--text-main); line-height: 1.2; }
+        .item-details { font-size: 12px; color: var(--text-light); font-weight: 500; line-height: 1.2; }
+
+        .clickable-edit {
+            cursor: pointer; padding: 4px 0 4px 8px; display: flex; align-items: center; justify-content: flex-end;
+            min-width: 70px;
+        }
+        .item-price { font-weight: 700; font-size: 14px; color: var(--text-main); }
 
         /* Rodapé Fixo */
         .bottom-panel {
@@ -147,7 +183,7 @@
         .total-box strong { font-size: 1.2rem; }
 
         /* =========================================
-           MODAIS (VISUAL MODERNO E PROFISSIONAL)
+           MODAIS
            ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -190,10 +226,21 @@
             outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
         
-        .modal-content .btn-add {
-            border-radius: 10px; padding: 14px; font-size: 1.05rem; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25); transition: transform 0.1s;
+        .modal-actions { display: flex; gap: 10px; margin-top: 10px; }
+        
+        .btn-primary {
+            flex: 1; padding: 14px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; font-size: 1.05rem; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25); transition: transform 0.1s;
         }
-        .modal-content .btn-add:active { transform: scale(0.98); }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-danger {
+            flex: 1; padding: 14px; background: var(--danger); color: white;
+            border: none; border-radius: 10px; font-size: 1.05rem; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25); transition: transform 0.1s;
+        }
+        .btn-danger:active { transform: scale(0.98); }
 
         .btn-cancel {
             width: 100%; padding: 14px; background: #f1f5f9; color: var(--text-main);
@@ -234,7 +281,8 @@
     <div class="header">
         <h1>Cesta Básica 🛒</h1>
         <div class="header-actions">
-            <button class="btn-header" id="toggleFormBtn" onclick="toggleAddForm()">➕</button>
+            <!-- ÍCONE TROCADO PARA 🧺 -->
+            <button class="btn-header" onclick="startNewBasket()" title="Criar nova cesta do zero">🧺</button>
             <button class="btn-header" onclick="openHistory()">📁</button>
             <button class="btn-header" onclick="shareOnWhatsApp()">📲</button>
             <button class="btn-header" onclick="saveBasket()">💾</button>
@@ -256,11 +304,17 @@
             <div class="form-row">
                 <div class="input-group">
                     <label for="itemCost">Custo Unitário (R$)</label>
-                    <input type="number" id="itemCost" inputmode="decimal" step="0.01" min="0" placeholder="0.00" required>
+                    <input type="text" id="itemCost" inputmode="decimal" placeholder="0,00" required oninput="this.value = formatCurrencyInput(this.value)">
                 </div>
             </div>
             <button type="submit" class="btn-add">Adicionar Produto</button>
         </form>
+    </div>
+
+    <!-- Barra de Busca + Botão Adicionar (VERDE) -->
+    <div class="search-row">
+        <input type="text" id="searchInput" placeholder="🔍 Buscar produto..." oninput="handleSearch(this.value)">
+        <button class="btn-search-add" id="toggleFormBtn" onclick="toggleAddForm()">➕</button>
     </div>
 
     <div class="list-container" id="itemList"></div>
@@ -272,7 +326,7 @@
                 <small>Margem Real</small> <span id="realMarginValue">33,77%</span>
             </span>
             <div class="markup-input-group">
-                <label for="markupPercent">Margem Markup(%)</label>
+                <label for="markupPercent">Margem (%)</label>
                 <input type="number" id="markupPercent" value="35" step="0.01" onchange="updateTotals()" oninput="updateTotals()" inputmode="decimal" placeholder="0">
             </div>
         </div>
@@ -286,7 +340,7 @@
             <label for="spendingLimit">Limite de Gasto</label>
             <div class="input-with-prefix">
                 <span>R$</span>
-                <input type="text" id="spendingLimit" value="200,00" oninput="updateTotals()" onblur="formatLimitInput()" inputmode="decimal" placeholder="0,00">
+                <input type="text" id="spendingLimit" value="200,00" oninput="this.value = formatCurrencyInput(this.value); updateTotals();" inputmode="decimal" placeholder="0,00">
             </div>
         </div>
         <div class="progress-container">
@@ -337,10 +391,15 @@
                 <div class="form-row">
                     <div class="input-group">
                         <label for="editItemCost">Custo Unitário (R$)</label>
-                        <input type="number" id="editItemCost" inputmode="decimal" step="0.01" min="0" required>
+                        <input type="text" id="editItemCost" inputmode="decimal" required oninput="this.value = formatCurrencyInput(this.value)">
                     </div>
                 </div>
-                <button class="btn-add" onclick="saveEdit()">Salvar Alterações</button>
+                
+                <div class="modal-actions">
+                    <button class="btn-danger" onclick="deleteItemFromModal()">Deletar</button>
+                    <button class="btn-primary" onclick="saveEdit()">Salvar</button>
+                </div>
+                <button class="btn-cancel" style="margin-top: 10px;" onclick="closeEditModal()">Cancelar</button>
             </div>
         </div>
     </div>
@@ -359,7 +418,7 @@
                         <input type="text" id="saveBasketName" autocomplete="off">
                     </div>
                 </div>
-                <button class="btn-add" onclick="confirmSaveBasket()">Confirmar e Salvar</button>
+                <button class="btn-primary" onclick="confirmSaveBasket()">Confirmar e Salvar</button>
             </div>
         </div>
     </div>
@@ -375,7 +434,7 @@
                 <p id="confirmMessage" style="font-size: 1rem; color: var(--text-main); margin-bottom: 20px; line-height: 1.4;"></p>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn-cancel" onclick="closeConfirmModal(true)">Cancelar</button>
-                    <button class="btn-add" id="confirmBtnAction" style="box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);">Excluir</button>
+                    <button class="btn-danger" id="confirmBtnAction">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -395,6 +454,26 @@
     <div class="toast" id="toast"></div>
 
 <script>
+    // ==========================================
+    // FUNÇÕES DE FORMATAÇÃO E MÁSCARA
+    // ==========================================
+    function formatCurrencyInput(value) {
+        let v = value.replace(/\D/g, ""); 
+        v = v.slice(0, 9); 
+        v = v.padStart(3, "0"); 
+        let inteiros = v.slice(0, -2);
+        let centavos = v.slice(-2);
+        inteiros = parseInt(inteiros, 10).toString();
+        if (inteiros === "" || isNaN(inteiros)) inteiros = "0";
+        inteiros = inteiros.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return inteiros + "," + centavos;
+    }
+
+    function parseCurrency(value) {
+        if (!value) return 0;
+        return parseFloat(value.replace(/\./g, "").replace(",", ".")) || 0;
+    }
+
     function escapeHTML(str) {
         if (str == null) return '';
         return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -415,7 +494,7 @@
         { id: 3, name: "Biscoito Salgado 400g", qty: 1, cost: 5.29, checked: false },
         { id: 4, name: "Bolacha Maizena 350g", qty: 1, cost: 4.19, checked: false },
         { id: 5, name: "Café 250g", qty: 1, cost: 9.99, checked: false },
-        { id: 6, name: "Farinha 1kg", qty: 1, cost: 5.29, checked: false },
+        { id: 6, name: "Farinha de Mesa 1kg", qty: 1, cost: 5.29, checked: false },
         { id: 7, name: "Feijão 1kg", qty: 1, cost: 5.39, checked: false },
         { id: 8, name: "Flocão 400g", qty: 2, cost: 1.25, checked: false },
         { id: 9, name: "Leite em pó 200g", qty: 1, cost: 5.65, checked: false },
@@ -445,19 +524,17 @@
     }
 
     document.getElementById('markupPercent').value = currentMarkup;
-    document.getElementById('spendingLimit').value = currentLimit.toFixed(2).replace('.', ',');
+    document.getElementById('spendingLimit').value = currentLimit.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-    function formatLimitInput() {
-        let val = document.getElementById('spendingLimit').value.replace(',', '.');
-        let num = parseFloat(val);
-        if (isNaN(num) || num < 0) num = 0;
-        document.getElementById('spendingLimit').value = num.toFixed(2).replace('.', ',');
-        autoSave();
-        updateTotals();
+    let currentSearchTerm = "";
+
+    function handleSearch(val) {
+        currentSearchTerm = val.toLowerCase();
+        renderList();
     }
 
     function autoSave() {
-        let limitVal = parseFloat(document.getElementById('spendingLimit').value.replace(',', '.')) || 0;
+        let limitVal = parseCurrency(document.getElementById('spendingLimit').value);
         storage.set('cestaCurrentState', {
             items: items, nextId: nextId,
             markup: parseFloat(document.getElementById('markupPercent').value) || 0,
@@ -474,16 +551,50 @@
         toastTimer = setTimeout(() => { toast.className = 'toast ' + type; }, 2500);
     }
 
+    function startNewBasket() {
+        if (items.length === 0) {
+            showToast('A cesta já está vazia.', 'error');
+            return;
+        }
+
+        showConfirm(
+            'Nova Cesta Básica',
+            'Deseja criar uma nova cesta do zero? Todos os produtos da lista atual serão removidos.',
+            'Sim, Limpar',
+            'var(--primary)',
+            () => {
+                items = [];
+                nextId = 1;
+                document.getElementById('markupPercent').value = 35;
+                document.getElementById('spendingLimit').value = "200,00";
+                document.getElementById('searchInput').value = '';
+                currentSearchTerm = "";
+                
+                const form = document.getElementById('addFormContainer');
+                if (!form.classList.contains('hidden')) {
+                    toggleAddForm();
+                }
+
+                renderList();
+                autoSave();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                showToast('Nova cesta iniciada! Adicione os produtos.', 'success');
+            }
+        );
+    }
+
     function toggleAddForm() {
         const form = document.getElementById('addFormContainer');
         const btn = document.getElementById('toggleFormBtn');
         if (form.classList.contains('hidden')) {
             form.classList.remove('hidden');
             btn.innerText = '✖';
+            btn.style.fontSize = '1rem'; // Ajuste do tamanho do X no botão menor
             setTimeout(() => document.getElementById('itemName').focus(), 50);
         } else {
             form.classList.add('hidden');
             btn.innerText = '➕';
+            btn.style.fontSize = '1.1rem'; // Ajuste do tamanho do + no botão menor
         }
     }
 
@@ -513,7 +624,7 @@
         e.preventDefault();
         const name = document.getElementById('itemName').value.trim();
         const qty = parseInt(document.getElementById('itemQty').value);
-        const cost = parseFloat(document.getElementById('itemCost').value);
+        const cost = parseCurrency(document.getElementById('itemCost').value);
 
         if (!name || isNaN(qty) || qty <= 0 || isNaN(cost) || cost < 0) {
             showToast('Preencha todos os campos corretamente.', 'error'); return;
@@ -524,6 +635,9 @@
         document.getElementById('itemQty').value = '1';
         document.getElementById('itemCost').value = '';
         
+        document.getElementById('searchInput').value = '';
+        currentSearchTerm = "";
+
         toggleAddForm(); renderList(); autoSave();
         showToast('Produto adicionado.', 'success');
     });
@@ -533,39 +647,44 @@
         if (item) { item.checked = !item.checked; renderList(); autoSave(); }
     }
 
-    function deleteItem(id, event) {
-        event.stopPropagation();
+    let editingItemId = null;
+
+    function editItem(id) {
+        const item = items.find(i => i.id === id);
+        if (item) {
+            editingItemId = id;
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('editItemName').value = item.name;
+            document.getElementById('editItemQty').value = item.qty;
+            document.getElementById('editItemCost').value = item.cost.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            openModal('editModal');
+        }
+    }
+
+    function closeEditModal() { 
+        closeModal('editModal'); 
+        editingItemId = null;
+    }
+
+    function deleteItemFromModal() {
+        closeEditModal();
         showConfirm(
             'Excluir Produto',
             'Tem certeza que deseja excluir este produto da lista?',
-            'Excluir',
+            'Deletar',
             'var(--danger)',
             () => {
-                items = items.filter(item => item.id !== id);
+                items = items.filter(item => item.id !== editingItemId);
                 renderList(); autoSave(); showToast('Produto excluído.', 'success');
             }
         );
     }
 
-    function editItem(id, event) {
-        event.stopPropagation();
-        const item = items.find(i => i.id === id);
-        if (item) {
-            document.getElementById('editItemId').value = item.id;
-            document.getElementById('editItemName').value = item.name;
-            document.getElementById('editItemQty').value = item.qty;
-            document.getElementById('editItemCost').value = item.cost;
-            openModal('editModal');
-        }
-    }
-
-    function closeEditModal() { closeModal('editModal'); }
-
     function saveEdit() {
         const id = parseInt(document.getElementById('editItemId').value);
         const name = document.getElementById('editItemName').value.trim();
         const qty = parseInt(document.getElementById('editItemQty').value);
-        const cost = parseFloat(document.getElementById('editItemCost').value);
+        const cost = parseCurrency(document.getElementById('editItemCost').value);
 
         if (!name || isNaN(qty) || qty <= 0 || isNaN(cost) || cost < 0) {
             showToast('Preencha todos os campos corretamente.', 'error'); return;
@@ -589,27 +708,33 @@
         const listContainer = document.getElementById('itemList');
         listContainer.innerHTML = '';
 
-        if (items.length === 0) {
-            listContainer.innerHTML = `<div class="empty-state"><span style="font-size:2rem;display:block;margin-bottom:5px;">🛒</span>Lista vazia<br>Toque em ➕ para adicionar.</div>`;
+        let filteredItems = items.filter(item => 
+            item.name.toLowerCase().includes(currentSearchTerm)
+        );
+        
+        filteredItems.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }));
+
+        if (filteredItems.length === 0) {
+            listContainer.innerHTML = `<div class="empty-state"><span style="font-size:2rem;display:block;margin-bottom:5px;">🔍</span>Nenhum produto encontrado.</div>`;
             updateTotals(); return;
         }
 
-        items.forEach(item => {
+        filteredItems.forEach(item => {
             const itemTotal = item.cost * item.qty;
             const card = document.createElement('div');
             card.className = `item-card ${item.checked ? 'checked' : ''}`;
-            card.onclick = () => toggleCheck(item.id);
-
+            
             card.innerHTML = `
-                <div class="checkbox-wrapper"><div class="custom-check"></div></div>
-                <div class="item-info">
-                    <span class="item-name">${escapeHTML(item.name)}</span>
-                    <span class="item-details">- ${item.qty} un x ${formatCurrency(item.cost)}</span>
+                <div class="clickable-select" onclick="toggleCheck(${item.id})">
+                    <div class="checkbox-wrapper"><div class="custom-check"></div></div>
+                    <div class="item-info">
+                        <span class="item-name">${escapeHTML(item.name)}</span>
+                        <span class="item-details">- ${item.qty} un x ${formatCurrency(item.cost)}</span>
+                    </div>
                 </div>
-                <div class="item-price">${formatCurrency(itemTotal)}</div>
-                <div class="item-actions">
-                    <button class="btn-icon btn-edit" onclick="editItem(${item.id}, event)">✏️</button>
-                    <button class="btn-icon btn-delete" onclick="deleteItem(${item.id}, event)">✖</button>
+                
+                <div class="clickable-edit" onclick="editItem(${item.id})">
+                    <div class="item-price">${formatCurrency(itemTotal)}</div>
                 </div>
             `;
             listContainer.appendChild(card);
@@ -623,8 +748,7 @@
         if (markup < 0) markup = 0;
         const multiplier = 1 + (markup / 100);
         
-        let limitStr = limitInput.value.replace(',', '.');
-        let limit = parseFloat(limitStr) || 0;
+        let limit = parseCurrency(limitInput.value);
 
         let totalListCost = 0, selectedCost = 0, totalQuantity = 0;
 
@@ -691,9 +815,6 @@
         });
     });
 
-    // ==========================================
-    // LÓGICA DO MODAL DE CONFIRMAÇÃO GENÉRICO
-    // ==========================================
     let confirmCallback = null;
     let cancelCallback = null;
 
@@ -703,11 +824,7 @@
         
         const btn = document.getElementById('confirmBtnAction');
         btn.innerText = btnText;
-        btn.style.background = btnColor;
         
-        if(btnColor === 'var(--danger)') btn.style.boxShadow = '0 4px 10px rgba(239, 68, 68, 0.25)';
-        else btn.style.boxShadow = '0 4px 10px rgba(37, 99, 235, 0.25)';
-
         confirmCallback = onConfirm;
         cancelCallback = onCancel;
         openModal('confirmModal');
@@ -729,9 +846,6 @@
         closeConfirmModal(false);
     });
 
-    // ==========================================
-    // SALVAR CESTA
-    // ==========================================
     function saveBasket() {
         if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
         
@@ -750,7 +864,7 @@
         const basketName = document.getElementById('saveBasketName').value.trim();
         if (!basketName) { showToast('Informe um nome para a cesta.', 'error'); return; }
 
-        let limitVal = parseFloat(limitInput.value.replace(',', '.')) || 0;
+        let limitVal = parseCurrency(limitInput.value);
         
         let markup = parseFloat(markupInput.value) || 0;
         const multiplier = 1 + (markup / 100);
@@ -838,27 +952,25 @@
         markupInput.value = basket.markup;
         
         let lim = basket.limit || 200;
-        limitInput.value = lim.toFixed(2).replace('.', ',');
+        limitInput.value = lim.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
+        document.getElementById('searchInput').value = '';
+        currentSearchTerm = "";
+
         closeHistory(); 
         renderList(); autoSave();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         showToast('Cesta carregada.', 'success');
     }
 
-    // ==========================================
-    // EXCLUSÃO DE CESTA (CORRIGIDO)
-    // ==========================================
     function deleteBasket(id) {
-        // Fecha o histórico antes de mostrar a confirmação
         closeHistory();
 
         showConfirm(
             'Excluir Cesta',
             'Tem certeza que deseja apagar esta cesta do histórico? Essa ação não pode ser desfeita.',
-            'Excluir',
+            'Deletar',
             'var(--danger)',
-            // Se confirmar: apaga e reabre o histórico com a lista atualizada
             () => {
                 let history = storage.get('cestaHistory', []);
                 history = history.filter(b => b.id !== id);
@@ -866,7 +978,6 @@
                 openHistory(); 
                 showToast('Cesta excluída do histórico.', 'success');
             },
-            // Se cancelar: apenas reabre o histórico
             () => {
                 openHistory();
             }
