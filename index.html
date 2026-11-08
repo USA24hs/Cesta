@@ -43,7 +43,7 @@
             color: var(--text-main);
         }
 
-        /* Topo fixo mais compacto */
+        /* Topo fixo */
         .header {
             background-color: var(--primary);
             color: white;
@@ -74,7 +74,7 @@
             justify-content: center;
         }
 
-        /* Formulário (Oculto) */
+        /* Formulário */
         .form-container {
             background: var(--bg-card);
             padding: 12px;
@@ -112,7 +112,7 @@
         .item-card.checked { opacity: 0.6; background: #f8fafc; }
         .item-card.checked .item-info { text-decoration: line-through; color: var(--text-light); }
 
-        /* Checkbox menor */
+        /* Checkbox */
         .checkbox-wrapper { margin-right: 6px; display: flex; align-items: center; justify-content: center; }
         .custom-check {
             width: 20px; height: 20px; border: 2px solid var(--border);
@@ -122,7 +122,7 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 12px; }
 
-        /* Fontes 16px e 14px */
+        /* ALTERAÇÃO AQUI: Fontes 14px e 12px */
         .item-info {
             flex: 1;
             display: flex;
@@ -133,18 +133,18 @@
             gap: 2px;
         }
 
-        .item-name { font-weight: 700; font-size: 16px; color: var(--text-main); line-height: 1.1; }
-        .item-details { font-size: 14px; color: var(--text-light); font-weight: 500; line-height: 1.1; }
+        .item-name { font-weight: 700; font-size: 14px; color: var(--text-main); line-height: 1.1; }
+        .item-details { font-size: 12px; color: var(--text-light); font-weight: 500; line-height: 1.1; }
 
         .item-price {
-            font-weight: 700; font-size: 16px; color: var(--text-main);
-            margin-right: 6px; min-width: 65px; text-align: right;
+            font-weight: 700; font-size: 14px; color: var(--text-main);
+            margin-right: 4px; min-width: 60px; text-align: right; /* Ajustado para fonte menor */
         }
 
         .item-actions { display: flex; flex-direction: row; gap: 2px; align-items: center; }
         .btn-icon {
             background: transparent; border: none; border-radius: 4px;
-            font-size: 0.9rem; padding: 4px; cursor: pointer;
+            font-size: 0.85rem; padding: 4px; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
         }
         .btn-icon:active { background: #e2e8f0; }
