@@ -151,97 +151,72 @@
            ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6); /* Cor mais escura e sofisticada */
-            backdrop-filter: blur(4px); /* Efeito de vidro */
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
             z-index: 50; display: none; justify-content: center; align-items: flex-end;
             transition: opacity 0.3s ease;
         }
         
         .modal-content {
             background: white; width: 100%; max-height: 85vh;
-            border-radius: 24px 24px 0 0; padding: 20px 20px 30px 20px; /* Mais espaçamento */
-            display: flex; flex-direction: column; 
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
-            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Animação mais suave */
-            position: relative;
+            border-radius: 24px 24px 0 0; padding: 20px 20px 30px 20px;
+            display: flex; flex-direction: column; box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
         }
 
-        /* Alça de arrastar (Drag handle) */
         .modal-content::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 5px;
-            background: #cbd5e1;
-            border-radius: 10px;
+            content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 5px; background: #cbd5e1; border-radius: 10px;
         }
 
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-top: 10px; margin-bottom: 20px; padding-bottom: 0; border-bottom: none;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 20px; }
         .modal-header h2 { margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
         
-        /* Botão fechar moderno (círculo cinza) */
         .btn-close {
             background: #f1f5f9; border: none; width: 32px; height: 32px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1rem; color: var(--text-light); cursor: pointer;
-            transition: background 0.2s;
+            font-size: 1rem; color: var(--text-light); cursor: pointer; transition: background 0.2s;
         }
         .btn-close:active { background: #e2e8f0; }
 
-        /* Inputs dentro do modal mais elegantes */
         .modal-content .form-row { margin-bottom: 16px; }
         .modal-content .input-group label { color: var(--text-light); font-weight: 600; font-size: 0.8rem; margin-bottom: 6px; }
         .modal-content .input-group input {
             border-radius: 10px; padding: 14px; border: 1.5px solid var(--border);
-            font-size: 16px; background: #f8fafc; transition: all 0.2s;
+            font-size: 16px; background: #f8fafc; transition: all 0.2s; width: 100%;
         }
         .modal-content .input-group input:focus {
-            outline: none; border-color: var(--primary); background: white;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
+        
         .modal-content .btn-add {
-            border-radius: 10px; padding: 14px; font-size: 1.05rem;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
-            transition: transform 0.1s;
+            border-radius: 10px; padding: 14px; font-size: 1.05rem; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25); transition: transform 0.1s;
         }
         .modal-content .btn-add:active { transform: scale(0.98); }
 
-        /* Lista de Histórico (Cards modernos) */
+        /* Botão Cancelar genérico */
+        .btn-cancel {
+            width: 100%; padding: 14px; background: #f1f5f9; color: var(--text-main);
+            border: none; border-radius: 10px; font-size: 1.05rem; font-weight: bold; cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .btn-cancel:active { transform: scale(0.98); background: #e2e8f0; }
+
+        /* Lista de Histórico */
         .history-list { overflow-y: auto; flex: 1; padding-right: 4px; }
         .history-item {
             border: 1px solid var(--border); border-radius: 12px; padding: 14px;
             margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
             background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            transition: border-color 0.2s;
         }
-        .history-item:hover { border-color: #cbd5e1; }
-        
         .history-info { flex: 1; min-width: 0; }
         .history-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main); word-wrap: break-word; }
         .history-info p { margin: 0; font-size: 0.8rem; color: var(--text-light); line-height: 1.4; }
-        
         .history-actions { display: flex; flex-direction: column; gap: 6px; min-width: 75px; }
-        .btn-load { 
-            background: var(--primary); color: white; border: none; padding: 8px 12px; 
-            border-radius: 8px; font-weight: bold; font-size: 0.8rem; cursor: pointer;
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
-        }
+        .btn-load { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2); }
         .btn-load:active { background: #1d4ed8; }
-        
-        .btn-delete-history { 
-            background: transparent; color: var(--danger); border: 1px solid var(--danger-bg); 
-            padding: 7px 12px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; cursor: pointer;
-            transition: background 0.2s;
-        }
+        .btn-delete-history { background: transparent; color: var(--danger); border: 1px solid var(--danger-bg); padding: 7px 12px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; cursor: pointer; transition: background 0.2s; }
         .btn-delete-history:active { background: var(--danger-bg); }
 
         /* Toast */
@@ -367,6 +342,42 @@
                     </div>
                 </div>
                 <button class="btn-add" onclick="saveEdit()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Salvar Cesta -->
+    <div class="modal-overlay" id="saveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Salvar Cesta</h2>
+                <button class="btn-close" onclick="closeSaveModal()">✖</button>
+            </div>
+            <div style="padding-bottom: 10px;">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="saveBasketName">Nome da Cesta</label>
+                        <input type="text" id="saveBasketName" autocomplete="off">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="confirmSaveBasket()">Confirmar e Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação Genérico (NOVO) -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content" style="max-height: 50vh;">
+            <div class="modal-header">
+                <h2 id="confirmTitle">Confirmação</h2>
+                <button class="btn-close" onclick="closeConfirmModal()">✖</button>
+            </div>
+            <div style="padding-bottom: 10px;">
+                <p id="confirmMessage" style="font-size: 1rem; color: var(--text-main); margin-bottom: 20px; line-height: 1.4;"></p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+                    <button class="btn-add" id="confirmBtnAction" style="box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);">Excluir</button>
+                </div>
             </div>
         </div>
     </div>
@@ -523,12 +534,21 @@
         if (item) { item.checked = !item.checked; renderList(); autoSave(); }
     }
 
+    // ==========================================
+    // EXCLUSÃO DE ITEM COM MODAL CUSTOMIZADO
+    // ==========================================
     function deleteItem(id, event) {
         event.stopPropagation();
-        if (confirm("Excluir este produto da lista?")) {
-            items = items.filter(item => item.id !== id);
-            renderList(); autoSave(); showToast('Produto excluído.');
-        }
+        showConfirm(
+            'Excluir Produto',
+            'Tem certeza que deseja excluir este produto da lista?',
+            'Excluir',
+            'var(--danger)',
+            () => {
+                items = items.filter(item => item.id !== id);
+                renderList(); autoSave(); showToast('Produto excluído.', 'success');
+            }
+        );
     }
 
     function editItem(id, event) {
@@ -669,19 +689,63 @@
         });
     });
 
+    // ==========================================
+    // LÓGICA DO MODAL DE CONFIRMAÇÃO GENÉRICO
+    // ==========================================
+    let confirmCallback = null;
+    function showConfirm(title, message, btnText, btnColor, callback) {
+        document.getElementById('confirmTitle').innerText = title;
+        document.getElementById('confirmMessage').innerText = message;
+        
+        const btn = document.getElementById('confirmBtnAction');
+        btn.innerText = btnText;
+        btn.style.background = btnColor;
+        
+        // Ajusta a cor da sombra do botão para combinar
+        if(btnColor === 'var(--danger)') btn.style.boxShadow = '0 4px 10px rgba(239, 68, 68, 0.25)';
+        else btn.style.boxShadow = '0 4px 10px rgba(37, 99, 235, 0.25)';
+
+        confirmCallback = callback;
+        openModal('confirmModal');
+    }
+
+    function closeConfirmModal() {
+        closeModal('confirmModal');
+        confirmCallback = null;
+    }
+
+    document.getElementById('confirmBtnAction').addEventListener('click', () => {
+        if (typeof confirmCallback === 'function') {
+            confirmCallback();
+        }
+        closeConfirmModal();
+    });
+
+    // ==========================================
+    // SALVAR CESTA
+    // ==========================================
     function saveBasket() {
         if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
+        
         const productCount = items.length; 
         const totalItemsQty = items.reduce((acc, curr) => acc + curr.qty, 0); 
         const defaultName = `Cesta Básica COD: CB${productCount}${totalItemsQty}`;
 
-        const basketName = prompt("Dê um nome para esta cesta:", defaultName);
-        if (!basketName) return;
+        document.getElementById('saveBasketName').value = defaultName;
+        openModal('saveModal');
+        setTimeout(() => document.getElementById('saveBasketName').focus(), 100);
+    }
+
+    function closeSaveModal() { closeModal('saveModal'); }
+
+    function confirmSaveBasket() {
+        const basketName = document.getElementById('saveBasketName').value.trim();
+        if (!basketName) { showToast('Informe um nome para a cesta.', 'error'); return; }
 
         let limitVal = parseFloat(limitInput.value.replace(',', '.')) || 0;
 
         const newBasket = {
-            id: Date.now(), name: basketName.trim(),
+            id: Date.now(), name: basketName,
             date: new Date().toLocaleString('pt-BR'),
             items: JSON.parse(JSON.stringify(items)),
             markup: markupInput.value, limit: limitVal,
@@ -690,10 +754,18 @@
 
         let history = storage.get('cestaHistory', []);
         history.push(newBasket);
-        if (storage.set('cestaHistory', history)) showToast('Cesta salva!', 'success');
-        else showToast('Erro ao salvar.', 'error');
+        
+        if (storage.set('cestaHistory', history)) {
+            showToast('Cesta salva com sucesso!', 'success');
+            closeSaveModal();
+        } else {
+            showToast('Erro ao salvar cesta.', 'error');
+        }
     }
 
+    // ==========================================
+    // HISTÓRICO E EXCLUSÃO DE CESTA
+    // ==========================================
     function openHistory() { renderHistory(); openModal('historyModal'); }
     function closeHistory() { closeModal('historyModal'); }
 
@@ -724,8 +796,24 @@
         let history = storage.get('cestaHistory', []);
         const basket = history.find(b => b.id === id);
         if (!basket) return;
-        if (items.length > 0 && !confirm('Abrir esta cesta substituirá a lista atual. Continuar?')) return;
 
+        // Confirmação para substituir a lista atual
+        if (items.length > 0) {
+            showConfirm(
+                'Abrir Cesta',
+                'Abrir esta cesta substituirá a lista atual. Deseja continuar?',
+                'Abrir',
+                'var(--primary)',
+                () => {
+                    executeLoadBasket(basket);
+                }
+            );
+        } else {
+            executeLoadBasket(basket);
+        }
+    }
+
+    function executeLoadBasket(basket) {
         items = JSON.parse(JSON.stringify(basket.items));
         nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
         markupInput.value = basket.markup;
@@ -738,12 +826,21 @@
         showToast('Cesta carregada.', 'success');
     }
 
+    // EXCLUSÃO DE CESTA COM MODAL CUSTOMIZADO
     function deleteBasket(id) {
-        if (!confirm("Apagar esta cesta do histórico?")) return;
-        let history = storage.get('cestaHistory', []);
-        history = history.filter(b => b.id !== id);
-        storage.set('cestaHistory', history); renderHistory();
-        showToast('Cesta excluída.');
+        showConfirm(
+            'Excluir Cesta',
+            'Tem certeza que deseja apagar esta cesta do histórico? Essa ação não pode ser desfeita.',
+            'Excluir',
+            'var(--danger)',
+            () => {
+                let history = storage.get('cestaHistory', []);
+                history = history.filter(b => b.id !== id);
+                storage.set('cestaHistory', history); 
+                renderHistory();
+                showToast('Cesta excluída do histórico.', 'success');
+            }
+        );
     }
 
     function shareOnWhatsApp() {
