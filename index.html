@@ -25,7 +25,6 @@
             --danger: #ef4444;
             --danger-bg: #fee2e2;
             --border: #e2e8f0;
-            --whatsapp: #25D366;
         }
 
         * {
@@ -42,11 +41,11 @@
             color: var(--text-main);
         }
 
-        /* Topo fixo */
+        /* Topo fixo mais compacto */
         .header {
             background-color: var(--primary);
             color: white;
-            padding: 12px 15px;
+            padding: 8px 12px;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -56,250 +55,170 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
-
-        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+        .header h1 { margin: 0; font-size: 1rem; font-weight: 600; }
+        .header-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
 
         .btn-header {
             background: rgba(255,255,255,0.2);
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            transition: background 0.2s;
         }
 
-        .btn-header:active { background: rgba(255,255,255,0.4); }
-        .btn-header:focus-visible { outline: 2px solid white; outline-offset: 2px; }
-
-        /* Formulário (Oculto por padrão) */
+        /* Formulário (Oculto) */
         .form-container {
             background: var(--bg-card);
-            padding: 15px;
-            margin: 10px;
-            border-radius: 12px;
+            padding: 12px;
+            margin: 8px;
+            border-radius: 10px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             animation: slideDown 0.3s ease-out;
         }
-
         .form-container.hidden { display: none; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
         .input-group { display: flex; flex-direction: column; flex: 1; }
-        .input-group label { font-size: 0.85rem; color: var(--text-light); margin-bottom: 4px; font-weight: 600; }
-        .input-group input {
-            padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; background: #f8fafc;
-        }
-        .input-group input:focus { outline: none; border-color: var(--primary); background: white; }
+        .input-group label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 2px; font-weight: 600; }
+        .input-group input { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; background: #f8fafc; }
+        .btn-add { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-        .btn-add {
-            width: 100%; padding: 14px; background: var(--primary); color: white;
-            border: none; border-radius: 8px; font-size: 1.05rem; font-weight: bold; margin-top: 5px; cursor: pointer;
-        }
-        .btn-add:active { background: #1d4ed8; }
-        .btn-add:focus-visible { outline: 2px solid #1e3a8a; outline-offset: 2px; }
+        /* Lista de Itens Compacta */
+        .list-container { padding: 0 8px; }
 
-        /* Lista de Itens */
-        .list-container { padding: 0 10px; }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-light);
-            font-size: 1rem;
-        }
-        .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+        .empty-state { text-align: center; padding: 30px 20px; color: var(--text-light); font-size: 0.95rem; }
 
         .item-card {
             background: var(--bg-card);
-            padding: 12px 8px 12px 10px;
-            margin-bottom: 8px;
-            border-radius: 10px;
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
             transition: all 0.2s;
             cursor: pointer;
         }
 
-        .item-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-
         .item-card.checked { opacity: 0.6; background: #f8fafc; }
         .item-card.checked .item-info { text-decoration: line-through; color: var(--text-light); }
 
-        /* Checkbox customizado */
-        .checkbox-wrapper { margin-right: 8px; display: flex; align-items: center; justify-content: center; }
+        /* Checkbox menor */
+        .checkbox-wrapper { margin-right: 6px; display: flex; align-items: center; justify-content: center; }
         .custom-check {
-            width: 24px; height: 24px; border: 2px solid var(--border);
-            border-radius: 6px; display: flex; align-items: center; justify-content: center;
+            width: 20px; height: 20px; border: 2px solid var(--border);
+            border-radius: 4px; display: flex; align-items: center; justify-content: center;
             background: white; transition: all 0.2s;
         }
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
-        .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 14px; }
+        .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 12px; }
 
-        /* Conteúdo com Fontes 16px e 14px */
+        /* Fontes 16px e 14px */
         .item-info {
             flex: 1;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            align-items: baseline;
-            margin-right: 5px;
-            gap: 4px;
+            align-items: center;
+            margin-right: 4px;
+            gap: 2px;
         }
 
-        .item-name {
-            font-weight: 700;
-            font-size: 16px; 
-            color: var(--text-main);
-            line-height: 1.2;
-        }
-
-        .item-details {
-            font-size: 14px; 
-            color: var(--text-light);
-            font-weight: 500;
-            line-height: 1.2;
-        }
+        .item-name { font-weight: 700; font-size: 16px; color: var(--text-main); line-height: 1.1; }
+        .item-details { font-size: 14px; color: var(--text-light); font-weight: 500; line-height: 1.1; }
 
         .item-price {
-            font-weight: 700;
-            font-size: 16px; 
-            color: var(--text-main);
-            margin-right: 8px;
-            min-width: 75px;
-            text-align: right;
+            font-weight: 700; font-size: 16px; color: var(--text-main);
+            margin-right: 6px; min-width: 65px; text-align: right;
         }
 
-        /* Botões Lado a Lado */
-        .item-actions {
-            display: flex;
-            flex-direction: row;
-            gap: 6px;
-            align-items: center;
-            padding-right: 2px;
-        }
-
+        .item-actions { display: flex; flex-direction: row; gap: 2px; align-items: center; }
         .btn-icon {
-            background: #f1f5f9;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            padding: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: transparent; border: none; border-radius: 4px;
+            font-size: 0.9rem; padding: 4px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
         }
-        .btn-icon:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .btn-icon:active { background: #e2e8f0; }
         .btn-edit { color: var(--primary); }
         .btn-delete { color: var(--danger); }
 
-        /* Rodapé Fixo (Resumo) */
+        /* Rodapé Fixo */
         .bottom-panel {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: white; border-top: 1px solid var(--border);
             box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
-            padding: 15px; z-index: 20; border-radius: 20px 20px 0 0;
+            padding: 8px 12px; z-index: 20; border-radius: 16px 16px 0 0;
             transition: transform 0.3s ease-in-out;
         }
 
         .bottom-panel.hidden-panel { transform: translateY(100%); }
 
+        /* ALTERAÇÃO AQUI: Linha de margem */
         .markup-row {
             display: flex; justify-content: space-between; align-items: center;
-            background: #f1f5f9; padding: 8px 12px; border-radius: 8px; margin-bottom: 10px;
+            background: #f1f5f9; padding: 6px 10px; border-radius: 6px; margin-bottom: 6px;
         }
-        .markup-row label { font-weight: bold; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        
         .markup-suggested {
-            color: var(--success-text);
-            background: var(--success-bg);
-            font-weight: 700;
-            font-size: 0.85rem;
-            padding: 3px 10px;
-            border-radius: 12px;
-            border: 1px solid var(--success);
-            display: inline-flex;
+            color: var(--success-text); background: var(--success-bg); font-weight: 700;
+            font-size: 0.75rem; padding: 3px 8px; border-radius: 10px; border: 1px solid var(--success);
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .markup-suggested small { font-weight: 600; font-size: 0.65rem; opacity: 0.85; }
+
+        /* Agrupamento para alinhar a label e o input à direita */
+        .markup-input-group {
+            display: flex;
             align-items: center;
-            gap: 4px;
-            cursor: help;
-            text-decoration: dotted underline var(--success);
-            text-underline-offset: 3px;
+            gap: 8px;
         }
-        .markup-suggested small {
-            font-weight: 600;
-            font-size: 0.68rem;
-            opacity: 0.85;
-            text-transform: lowercase;
+        .markup-input-group label {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--text-main);
         }
-        .markup-suggested:active { transform: scale(0.97); }
-        .markup-row input {
-            width: 75px; padding: 8px; border: 1px solid var(--border);
-            border-radius: 6px; font-size: 16px; text-align: center; font-weight: bold;
+
+        .markup-row input, .limit-row input {
+            width: 65px; padding: 4px; border: 1px solid var(--border);
+            border-radius: 4px; font-size: 14px; text-align: center; font-weight: bold;
         }
 
         .counts-row {
             display: flex; justify-content: space-between;
-            font-size: 0.9rem; color: var(--text-light);
-            font-weight: 600; margin-bottom: 8px; padding: 0 5px;
+            font-size: 0.8rem; color: var(--text-light);
+            font-weight: 600; margin-bottom: 4px; padding: 0 2px;
         }
 
-        /* Grid de 3 colunas para Custo, Lucro e Selecionado */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 10px;
-        }
+        /* Limite */
+        .limit-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; padding: 0 2px; }
+        .limit-row label { font-size: 0.8rem; font-weight: bold; color: var(--text-light); }
+        .progress-container { height: 4px; background: #e2e8f0; border-radius: 2px; margin: 0 2px 2px 2px; overflow: hidden; }
+        .progress-bar { height: 100%; width: 0%; background: var(--success); transition: width 0.3s, background-color 0.3s; }
+        .limit-info { font-size: 0.7rem; font-weight: 600; text-align: right; padding: 0 2px; margin-bottom: 6px; color: var(--text-light); }
 
-        .summary-box {
-            background: #f8fafc;
-            padding: 6px 4px;
-            border-radius: 8px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .summary-box span {
-            display: block;
-            font-size: 0.7rem;
-            color: var(--text-light);
-            margin-bottom: 2px;
-            font-weight: 600;
-        }
-
-        .summary-box strong {
-            font-size: 1rem;
-            color: var(--text-main);
-        }
-
-        /* Estilo específico para o quadrado de Lucro */
-        .box-profit {
-            background: var(--success-bg) !important;
-        }
+        /* Grid de Resumo */
+        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 6px; }
+        .summary-box { background: #f8fafc; padding: 4px 2px; border-radius: 6px; text-align: center; display: flex; flex-direction: column; }
+        .summary-box span { display: block; font-size: 0.65rem; color: var(--text-light); margin-bottom: 2px; font-weight: 600; }
+        .summary-box strong { font-size: 0.95rem; color: var(--text-main); }
+        
+        .box-profit { background: var(--success-bg) !important; }
         .box-profit span { color: var(--success-text); }
         .box-profit strong { color: var(--success-text); }
 
         .total-box {
-            background: var(--primary); color: white; padding: 10px 12px;
-            border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
+            background: var(--primary); color: white; padding: 6px 10px;
+            border-radius: 6px; display: flex; justify-content: space-between; align-items: center;
         }
-        .total-box span { font-size: 0.95rem; font-weight: 500; }
-        .total-box strong { font-size: 1.4rem; }
+        .total-box span { font-size: 0.85rem; font-weight: 500; }
+        .total-box strong { font-size: 1.2rem; }
 
         /* Modais */
         .modal-overlay {
@@ -307,79 +226,37 @@
             background: rgba(0,0,0,0.5); z-index: 50;
             display: none; justify-content: center; align-items: flex-end;
         }
-
         .modal-content {
             background: white; width: 100%; max-height: 85vh;
-            border-radius: 20px 20px 0 0; padding: 20px;
-            display: flex; flex-direction: column;
-            animation: slideUp 0.3s ease-out;
+            border-radius: 20px 20px 0 0; padding: 15px;
+            display: flex; flex-direction: column; animation: slideUp 0.3s ease-out;
         }
-
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
-        }
-
-        .modal-header h2 { margin: 0; font-size: 1.2rem; }
-        .btn-close { background: none; border: none; font-size: 1.5rem; color: var(--text-light); cursor: pointer; line-height: 1; }
-        .btn-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
-
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+        .modal-header h2 { margin: 0; font-size: 1.1rem; }
+        .btn-close { background: none; border: none; font-size: 1.3rem; color: var(--text-light); cursor: pointer; }
+        
         .history-list { overflow-y: auto; flex: 1; }
-
-        .history-item {
-            border: 1px solid var(--border); border-radius: 8px; padding: 12px;
-            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-            gap: 10px;
-        }
-
+        .history-item { border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
         .history-info { flex: 1; min-width: 0; }
-        .history-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; word-wrap: break-word; overflow-wrap: anywhere; }
-        .history-info p { margin: 0; font-size: 0.85rem; color: var(--text-light); }
+        .history-info h3 { margin: 0 0 2px 0; font-size: 0.95rem; word-wrap: break-word; }
+        .history-info p { margin: 0; font-size: 0.8rem; color: var(--text-light); }
+        .history-actions { display: flex; flex-direction: column; gap: 4px; min-width: 70px; }
+        
+        .btn-load { background: var(--success); color: white; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
+        .btn-delete-history { background: var(--danger-bg); color: var(--danger); border: none; padding: 4px 10px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; cursor: pointer; }
 
-        .history-actions { display: flex; flex-direction: column; gap: 5px; min-width: 80px; }
-
-        .btn-load {
-            background: var(--success); color: white; border: none;
-            padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer;
-        }
-        .btn-load:active { background: #059669; }
-        .btn-load:focus-visible { outline: 2px solid #047857; outline-offset: 2px; }
-
-        .btn-delete-history {
-            background: var(--danger-bg); color: var(--danger); border: none;
-            padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: pointer;
-        }
-        .btn-delete-history:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
-
-        /* Toast de notificação */
+        /* Toast */
         .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: #1e293b; color: white; padding: 12px 20px;
-            border-radius: 8px; font-size: 0.95rem; font-weight: 600;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white; padding: 10px 16px;
+            border-radius: 8px; font-size: 0.85rem; font-weight: 600;
             z-index: 100; opacity: 0; transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2); max-width: 90vw; text-align: center;
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         .toast.success { background: var(--success); }
         .toast.error { background: var(--danger); }
-
-        /* Estilo de impressão */
-        @media print {
-            .header, .bottom-panel, .form-container, .item-actions, .modal-overlay, .toast { display: none !important; }
-            body { padding: 0; background: white; }
-            .item-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
-            .list-container { padding: 0; }
-        }
-
-        /* Ajuste para telas muito pequenas */
-        @media (max-width: 360px) {
-            .header h1 { font-size: 1rem; }
-            .btn-header { padding: 6px 8px; font-size: 0.8rem; }
-            .item-name, .item-price { font-size: 14px; }
-            .item-details { font-size: 12px; }
-        }
     </style>
 </head>
 <body>
@@ -387,14 +264,13 @@
     <div class="header">
         <h1>Cesta Básica 🛒</h1>
         <div class="header-actions">
-            <button class="btn-header" id="toggleFormBtn" onclick="toggleAddForm()" aria-label="Adicionar produto">➕</button>
-            <button class="btn-header" onclick="openHistory()" aria-label="Abrir histórico">📁</button>
-            <button class="btn-header" onclick="shareOnWhatsApp()" aria-label="Compartilhar no WhatsApp">📲</button>
-            <button class="btn-header" onclick="saveBasket()" aria-label="Salvar cesta">💾</button>
+            <button class="btn-header" id="toggleFormBtn" onclick="toggleAddForm()">➕</button>
+            <button class="btn-header" onclick="openHistory()">📁</button>
+            <button class="btn-header" onclick="shareOnWhatsApp()">📲</button>
+            <button class="btn-header" onclick="saveBasket()">💾</button>
         </div>
     </div>
 
-    <!-- Formulário de Adição (Oculto) -->
     <div class="form-container hidden" id="addFormContainer">
         <form id="itemForm">
             <div class="form-row">
@@ -419,11 +295,19 @@
 
     <div class="list-container" id="itemList"></div>
 
-    <!-- Painel Inferior (Resumo) -->
+    <!-- Painel Inferior -->
     <div class="bottom-panel" id="bottomPanel">
+        
+        <!-- ALTERAÇÃO AQUI: Margem Real à esquerda, Label e Input à direita -->
         <div class="markup-row">
-            <label for="markupPercent"><span class="markup-suggested" id="realMarginBadge" title="Margem de lucro REAL sobre o preço de venda. Cálculo: markup ÷ (1 + markup). Ex.: markup 35% → margem 25,93%"><small>Margem Real</small> <span id="realMarginValue">25,93%</span></span> Margem de Lucro (%)</label>
-            <input type="number" id="markupPercent" value="35" step="0.01" onchange="updateTotals()" oninput="updateTotals()" inputmode="decimal" placeholder="0">
+            <span class="markup-suggested">
+                <small>Margem Real</small> <span id="realMarginValue">33,77%</span>
+            </span>
+            
+            <div class="markup-input-group">
+                <label for="markupPercent">Margem (%)</label>
+                <input type="number" id="markupPercent" value="35" step="0.01" onchange="updateTotals()" oninput="updateTotals()" inputmode="decimal" placeholder="0">
+            </div>
         </div>
 
         <div class="counts-row">
@@ -431,7 +315,16 @@
             <span id="countItems">Itens (un): 0</span>
         </div>
 
-        <!-- Grid com 3 colunas: Custo | Lucro | Selecionado -->
+        <!-- Limite de Gasto -->
+        <div class="limit-row">
+            <label for="spendingLimit">Limite de Gasto (R$)</label>
+            <input type="number" id="spendingLimit" value="200.00" step="0.01" min="0" oninput="updateTotals()" onchange="autoSave()" inputmode="decimal">
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="limitProgressBar"></div>
+        </div>
+        <div class="limit-info" id="limitInfoText">Ainda tem para gastar: R$ 200,00</div>
+
         <div class="summary-grid">
             <div class="summary-box">
                 <span>Custo Total</span>
@@ -453,12 +346,12 @@
         </div>
     </div>
 
-    <!-- Modal de Edição de Item -->
-    <div class="modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <!-- Modais e Toast -->
+    <div class="modal-overlay" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="editModalTitle">Editar Produto</h2>
-                <button class="btn-close" onclick="closeEditModal()" aria-label="Fechar">✖</button>
+                <h2>Editar Produto</h2>
+                <button class="btn-close" onclick="closeEditModal()">✖</button>
             </div>
             <div style="padding-bottom: 10px;">
                 <input type="hidden" id="editItemId">
@@ -483,58 +376,33 @@
         </div>
     </div>
 
-    <!-- Modal Histórico -->
-    <div class="modal-overlay" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+    <div class="modal-overlay" id="historyModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="historyModalTitle">Minhas Cestas Salvas</h2>
-                <button class="btn-close" onclick="closeHistory()" aria-label="Fechar">✖</button>
+                <h2>Minhas Cestas Salvas</h2>
+                <button class="btn-close" onclick="closeHistory()">✖</button>
             </div>
             <div class="history-list" id="historyList"></div>
         </div>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="toast" id="toast"></div>
 
 <script>
-    // --- UTILITÁRIO: escapar HTML para evitar XSS ---
     function escapeHTML(str) {
         if (str == null) return '';
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    // --- UTILITÁRIO: acesso seguro ao localStorage ---
     const storage = {
         get(key, fallback) {
-            try {
-                const v = localStorage.getItem(key);
-                return v ? JSON.parse(v) : fallback;
-            } catch (e) {
-                console.warn('Falha ao ler localStorage:', e);
-                return fallback;
-            }
+            try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; }
         },
         set(key, value) {
-            try {
-                localStorage.setItem(key, JSON.stringify(value));
-                return true;
-            } catch (e) {
-                console.warn('Falha ao gravar localStorage:', e);
-                return false;
-            }
-        },
-        remove(key) {
-            try { localStorage.removeItem(key); } catch (e) { /* noop */ }
+            try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (e) { return false; }
         }
     };
 
-    // DADOS INICIAIS
     const initialItems = [
         { id: 1, name: "Açúcar 1kg", qty: 2, cost: 3.85, checked: false },
         { id: 2, name: "Arroz 1kg", qty: 4, cost: 3.89, checked: false },
@@ -556,81 +424,67 @@
         { id: 18, name: "Vinagre 500ml", qty: 1, cost: 1.55, checked: false }
     ];
 
-    // Carrega estado salvo (auto-save) ou usa dados iniciais
     let savedState = storage.get('cestaCurrentState', null);
-    let items, nextId, currentMarkup;
+    let items, nextId, currentMarkup, currentLimit;
     if (savedState && Array.isArray(savedState.items)) {
         items = savedState.items;
         nextId = savedState.nextId || (Math.max(0, ...items.map(i => i.id)) + 1);
         currentMarkup = savedState.markup != null ? savedState.markup : 35;
+        currentLimit = savedState.limit != null ? savedState.limit : 200;
     } else {
         items = JSON.parse(JSON.stringify(initialItems));
         nextId = 19;
         currentMarkup = 35;
+        currentLimit = 200;
     }
 
-    // Aplica markup carregado ao campo
     document.getElementById('markupPercent').value = currentMarkup;
+    document.getElementById('spendingLimit').value = currentLimit;
 
-    // --- AUTO-SAVE ---
     function autoSave() {
         storage.set('cestaCurrentState', {
-            items: items,
-            nextId: nextId,
-            markup: parseFloat(document.getElementById('markupPercent').value) || 0
+            items: items, nextId: nextId,
+            markup: parseFloat(document.getElementById('markupPercent').value) || 0,
+            limit: parseFloat(document.getElementById('spendingLimit').value) || 0
         });
     }
 
-    // --- TOAST ---
     let toastTimer = null;
     function showToast(message, type = '') {
         const toast = document.getElementById('toast');
         toast.textContent = message;
         toast.className = 'toast show ' + type;
         if (toastTimer) clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-            toast.className = 'toast ' + type;
-        }, 2500);
+        toastTimer = setTimeout(() => { toast.className = 'toast ' + type; }, 2500);
     }
 
-    // --- MOSTRAR / OCULTAR FORMULÁRIO ---
     function toggleAddForm() {
         const form = document.getElementById('addFormContainer');
         const btn = document.getElementById('toggleFormBtn');
-
         if (form.classList.contains('hidden')) {
             form.classList.remove('hidden');
             btn.innerText = '✖';
-            btn.setAttribute('aria-label', 'Fechar formulário');
             setTimeout(() => document.getElementById('itemName').focus(), 50);
         } else {
             form.classList.add('hidden');
             btn.innerText = '➕';
-            btn.setAttribute('aria-label', 'Adicionar produto');
         }
     }
 
-    // --- ESCONDER PAINEL AO ROLAR (COM PROTEÇÃO PARA INPUT) ---
+    // --- CONTROLE DE SCROLL (Proteção de Inputs) ---
     let lastScrollTop = 0;
-    let isTypingMarkup = false; // Variável que controla se o usuário está digitando
+    let isTyping = false; 
     const bottomPanel = document.getElementById('bottomPanel');
     const markupInput = document.getElementById('markupPercent');
+    const limitInput = document.getElementById('spendingLimit');
 
-    // Detecta quando o usuário toca no campo de margem
-    markupInput.addEventListener('focus', function() {
-        isTypingMarkup = true;
-        bottomPanel.classList.remove('hidden-panel'); // Garante que o painel está visível
-    });
-
-    // Detecta quando o usuário sai do campo (fecha o teclado ou clica fora)
-    markupInput.addEventListener('blur', function() {
-        isTypingMarkup = false;
-    });
+    markupInput.addEventListener('focus', () => { isTyping = true; bottomPanel.classList.remove('hidden-panel'); });
+    markupInput.addEventListener('blur', () => { isTyping = false; });
+    limitInput.addEventListener('focus', () => { isTyping = true; bottomPanel.classList.remove('hidden-panel'); });
+    limitInput.addEventListener('blur', () => { isTyping = false; });
 
     window.addEventListener("scroll", function() {
-        // Se estiver digitando, não faz nada (trava o painel na tela)
-        if (isTypingMarkup) return;
-
+        if (isTyping) return;
         let st = window.pageYOffset || document.documentElement.scrollTop;
         if (st > lastScrollTop && st > 50) {
             bottomPanel.classList.add('hidden-panel');
@@ -640,77 +494,51 @@
         lastScrollTop = st <= 0 ? 0 : st;
     }, false);
 
-    // --- ADICIONAR ITEM ---
     document.getElementById('itemForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const name = document.getElementById('itemName').value.trim();
         const qty = parseInt(document.getElementById('itemQty').value);
         const cost = parseFloat(document.getElementById('itemCost').value);
 
-        if (!name) {
-            showToast('Informe o nome do produto.', 'error');
-            return;
-        }
-        if (isNaN(qty) || qty <= 0) {
-            showToast('Quantidade inválida.', 'error');
-            return;
-        }
-        if (isNaN(cost) || cost < 0) {
-            showToast('Custo unitário inválido.', 'error');
-            return;
+        if (!name || isNaN(qty) || qty <= 0 || isNaN(cost) || cost < 0) {
+            showToast('Preencha todos os campos corretamente.', 'error'); return;
         }
 
         items.push({ id: nextId++, name: name, qty: qty, cost: cost, checked: false });
-
         document.getElementById('itemName').value = '';
         document.getElementById('itemQty').value = '1';
         document.getElementById('itemCost').value = '';
-
-        toggleAddForm();
-        renderList();
-        autoSave();
+        
+        toggleAddForm(); renderList(); autoSave();
         showToast('Produto adicionado.', 'success');
     });
 
-    // --- MARCAR / DELETAR ---
     function toggleCheck(id) {
         const item = items.find(i => i.id === id);
-        if (item) {
-            item.checked = !item.checked;
-            renderList();
-            autoSave();
-        }
+        if (item) { item.checked = !item.checked; renderList(); autoSave(); }
     }
 
     function deleteItem(id, event) {
         event.stopPropagation();
         if (confirm("Excluir este produto da lista?")) {
             items = items.filter(item => item.id !== id);
-            renderList();
-            autoSave();
-            showToast('Produto excluído.');
+            renderList(); autoSave(); showToast('Produto excluído.');
         }
     }
 
-    // --- EDITAR ITEM ---
     function editItem(id, event) {
         event.stopPropagation();
         const item = items.find(i => i.id === id);
-
         if (item) {
             document.getElementById('editItemId').value = item.id;
             document.getElementById('editItemName').value = item.name;
             document.getElementById('editItemQty').value = item.qty;
             document.getElementById('editItemCost').value = item.cost;
-
             openModal('editModal');
-            setTimeout(() => document.getElementById('editItemName').focus(), 50);
         }
     }
 
-    function closeEditModal() {
-        closeModal('editModal');
-    }
+    function closeEditModal() { closeModal('editModal'); }
 
     function saveEdit() {
         const id = parseInt(document.getElementById('editItemId').value);
@@ -718,24 +546,20 @@
         const qty = parseInt(document.getElementById('editItemQty').value);
         const cost = parseFloat(document.getElementById('editItemCost').value);
 
-        if (!name) { showToast('Informe o nome do produto.', 'error'); return; }
-        if (isNaN(qty) || qty <= 0) { showToast('Quantidade inválida.', 'error'); return; }
-        if (isNaN(cost) || cost < 0) { showToast('Custo unitário inválido.', 'error'); return; }
+        if (!name || isNaN(qty) || qty <= 0 || isNaN(cost) || cost < 0) {
+            showToast('Preencha todos os campos corretamente.', 'error'); return;
+        }
 
         const index = items.findIndex(i => i.id === id);
         if (index !== -1) {
             items[index].name = name;
             items[index].qty = qty;
             items[index].cost = cost;
-
-            closeEditModal();
-            renderList();
-            autoSave();
+            closeEditModal(); renderList(); autoSave();
             showToast('Alterações salvas.', 'success');
         }
     }
 
-    // --- RENDERIZAÇÃO E CÁLCULOS ---
     function formatCurrency(value) {
         return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
@@ -745,32 +569,15 @@
         listContainer.innerHTML = '';
 
         if (items.length === 0) {
-            listContainer.innerHTML = `
-                <div class="empty-state">
-                    <span class="icon">🛒</span>
-                    <strong>Lista vazia</strong><br>
-                    Toque em ➕ para adicionar produtos.
-                </div>
-            `;
-            updateTotals();
-            return;
+            listContainer.innerHTML = `<div class="empty-state"><span style="font-size:2rem;display:block;margin-bottom:5px;">🛒</span>Lista vazia<br>Toque em ➕ para adicionar.</div>`;
+            updateTotals(); return;
         }
 
         items.forEach(item => {
             const itemTotal = item.cost * item.qty;
             const card = document.createElement('div');
             card.className = `item-card ${item.checked ? 'checked' : ''}`;
-            card.setAttribute('role', 'checkbox');
-            card.setAttribute('aria-checked', item.checked ? 'true' : 'false');
-            card.setAttribute('tabindex', '0');
-            card.setAttribute('aria-label', `${item.name}, ${item.qty} un x ${formatCurrency(item.cost)}, total ${formatCurrency(itemTotal)}`);
             card.onclick = () => toggleCheck(item.id);
-            card.onkeydown = (e) => {
-                if (e.key === ' ' || e.key === 'Enter') {
-                    e.preventDefault();
-                    toggleCheck(item.id);
-                }
-            };
 
             card.innerHTML = `
                 <div class="checkbox-wrapper"><div class="custom-check"></div></div>
@@ -780,8 +587,8 @@
                 </div>
                 <div class="item-price">${formatCurrency(itemTotal)}</div>
                 <div class="item-actions">
-                    <button class="btn-icon btn-edit" onclick="editItem(${item.id}, event)" aria-label="Editar ${escapeHTML(item.name)}">✏️</button>
-                    <button class="btn-icon btn-delete" onclick="deleteItem(${item.id}, event)" aria-label="Excluir ${escapeHTML(item.name)}">✖</button>
+                    <button class="btn-icon btn-edit" onclick="editItem(${item.id}, event)">✏️</button>
+                    <button class="btn-icon btn-delete" onclick="deleteItem(${item.id}, event)">✖</button>
                 </div>
             `;
             listContainer.appendChild(card);
@@ -791,21 +598,17 @@
     }
 
     function updateTotals() {
-        let markup = parseFloat(markupInput.value);
-        if (isNaN(markup) || markup < 0) {
-            markup = 0;
-        }
+        let markup = parseFloat(markupInput.value) || 0;
+        if (markup < 0) markup = 0;
         const multiplier = 1 + (markup / 100);
+        let limit = parseFloat(limitInput.value) || 0;
 
-        let totalListCost = 0;
-        let selectedCost = 0;
-        let totalQuantity = 0;
+        let totalListCost = 0, selectedCost = 0, totalQuantity = 0;
 
         items.forEach(item => {
             const itemTotal = item.cost * item.qty;
             totalListCost += itemTotal;
             totalQuantity += item.qty;
-
             if (item.checked) { selectedCost += itemTotal; }
         });
 
@@ -820,19 +623,30 @@
         document.getElementById('totalSellList').innerText = formatCurrency(totalSellList);
 
         const realMargin = markup > 0 ? (markup / (100 + markup)) * 100 : 0;
-        document.getElementById('realMarginValue').textContent = realMargin.toLocaleString('pt-BR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }) + '%';
+        document.getElementById('realMarginValue').textContent = realMargin.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+
+        const progressBar = document.getElementById('limitProgressBar');
+        const limitInfo = document.getElementById('limitInfoText');
+
+        if (limit > 0) {
+            let percentUsed = (totalListCost / limit) * 100;
+            progressBar.style.width = Math.min(percentUsed, 100) + '%';
+            if (totalListCost > limit) {
+                progressBar.style.backgroundColor = 'var(--danger)';
+                limitInfo.innerText = `Passou do limite em: ${formatCurrency(totalListCost - limit)}`;
+                limitInfo.style.color = 'var(--danger)';
+            } else {
+                progressBar.style.backgroundColor = 'var(--success)';
+                limitInfo.innerText = `Ainda tem para gastar: ${formatCurrency(limit - totalListCost)}`;
+                limitInfo.style.color = 'var(--text-light)';
+            }
+        } else {
+            progressBar.style.width = '0%';
+            limitInfo.innerText = 'Sem limite definido';
+            limitInfo.style.color = 'var(--text-light)';
+        }
     }
 
-    markupInput.addEventListener('change', function() {
-        const v = parseFloat(this.value);
-        if (isNaN(v) || v < 0) this.value = 0;
-        autoSave();
-    });
-
-    // --- MODAIS ---
     function openModal(id) {
         document.getElementById(id).style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -844,76 +658,49 @@
 
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal(this.id);
-            }
+            if (e.target === this) closeModal(this.id);
         });
     });
 
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            if (document.getElementById('editModal').style.display === 'flex') closeEditModal();
-            if (document.getElementById('historyModal').style.display === 'flex') closeHistory();
-        }
-    });
-
-    // --- SALVAR E HISTÓRICO ---
     function saveBasket() {
         if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
-
         const productCount = items.length; 
         const totalItemsQty = items.reduce((acc, curr) => acc + curr.qty, 0); 
-        const codigoAuto = `CB${productCount}${totalItemsQty}`;
-        const defaultName = `Cesta Básica COD: ${codigoAuto}`;
+        const defaultName = `Cesta Básica COD: CB${productCount}${totalItemsQty}`;
 
         const basketName = prompt("Dê um nome para esta cesta:", defaultName);
         if (!basketName) return;
 
-        const markup = markupInput.value;
-        const totalCost = items.reduce((acc, curr) => acc + (curr.cost * curr.qty), 0);
-
         const newBasket = {
-            id: Date.now(),
-            name: basketName.trim(),
+            id: Date.now(), name: basketName.trim(),
             date: new Date().toLocaleString('pt-BR'),
             items: JSON.parse(JSON.stringify(items)),
-            markup: markup,
-            totalCost: totalCost
+            markup: markupInput.value, limit: limitInput.value,
+            totalCost: items.reduce((acc, curr) => acc + (curr.cost * curr.qty), 0)
         };
 
         let history = storage.get('cestaHistory', []);
         history.push(newBasket);
-        if (storage.set('cestaHistory', history)) {
-            showToast('Cesta salva com sucesso!', 'success');
-        } else {
-            showToast('Erro ao salvar cesta.', 'error');
-        }
+        if (storage.set('cestaHistory', history)) showToast('Cesta salva!', 'success');
+        else showToast('Erro ao salvar.', 'error');
     }
 
-    function openHistory() {
-        renderHistory();
-        openModal('historyModal');
-    }
-
-    function closeHistory() {
-        closeModal('historyModal');
-    }
+    function openHistory() { renderHistory(); openModal('historyModal'); }
+    function closeHistory() { closeModal('historyModal'); }
 
     function renderHistory() {
         const historyList = document.getElementById('historyList');
         let history = storage.get('cestaHistory', []);
-
         if (history.length === 0) {
-            historyList.innerHTML = '<p style="text-align:center; color: var(--text-light); padding: 20px;">Nenhuma cesta salva ainda.</p>';
+            historyList.innerHTML = '<p style="text-align:center; color: var(--text-light); font-size:0.9rem; padding: 15px;">Nenhuma cesta salva.</p>';
             return;
         }
-
         historyList.innerHTML = [...history].reverse().map(basket => `
             <div class="history-item">
                 <div class="history-info">
                     <h3>${escapeHTML(basket.name)}</h3>
-                    <p>Data: ${escapeHTML(basket.date)}</p>
-                    <p>Custo: ${formatCurrency(basket.totalCost)} | Margem: ${escapeHTML(String(basket.markup))}%</p>
+                    <p>${escapeHTML(basket.date)}</p>
+                    <p>Custo: ${formatCurrency(basket.totalCost)} | Limite: ${formatCurrency(basket.limit || 0)}</p>
                 </div>
                 <div class="history-actions">
                     <button class="btn-load" onclick="loadBasket(${basket.id})">Abrir</button>
@@ -927,18 +714,14 @@
         let history = storage.get('cestaHistory', []);
         const basket = history.find(b => b.id === id);
         if (!basket) return;
-
-        const hasChanges = items.length > 0;
-        if (hasChanges && !confirm('Abrir esta cesta substituirá a lista atual. Continuar?')) {
-            return;
-        }
+        if (items.length > 0 && !confirm('Abrir esta cesta substituirá a lista atual. Continuar?')) return;
 
         items = JSON.parse(JSON.stringify(basket.items));
         nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
         markupInput.value = basket.markup;
-        closeHistory();
-        renderList();
-        autoSave();
+        limitInput.value = basket.limit || 200;
+        
+        closeHistory(); renderList(); autoSave();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         showToast('Cesta carregada.', 'success');
     }
@@ -947,37 +730,20 @@
         if (!confirm("Apagar esta cesta do histórico?")) return;
         let history = storage.get('cestaHistory', []);
         history = history.filter(b => b.id !== id);
-        storage.set('cestaHistory', history);
-        renderHistory();
-        showToast('Cesta excluída do histórico.');
+        storage.set('cestaHistory', history); renderHistory();
+        showToast('Cesta excluída.');
     }
 
-    // --- COMPARTILHAR NO WHATSAPP ---
     function shareOnWhatsApp() {
-        if (items.length === 0) { 
-            showToast('Lista vazia, nada para compartilhar.', 'error'); 
-            return; 
-        }
-
+        if (items.length === 0) { showToast('Lista vazia.', 'error'); return; }
         let totalQuantity = 0;
         items.forEach(item => { totalQuantity += item.qty; });
-
         let text = "🛒 *Minha Cesta Básica*\n\n";
-
-        items.forEach(item => {
-            text += `- ${item.name} (${item.qty} un)\n`;
-        });
-
+        items.forEach(item => { text += `- ${item.name} (${item.qty} un)\n`; });
         text += `\n_Cesta Básica Itens com: *${totalQuantity}*_`;
-
-        const encodedText = encodeURIComponent(text);
-        const whatsappUrl = `https://wa.me/?text=${encodedText}`;
-        
-        window.open(whatsappUrl, '_blank');
-        showToast('Abrindo WhatsApp...', 'success');
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    // Inicializa o app
     renderList();
 </script>
 
