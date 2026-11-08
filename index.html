@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2563eb">
     <meta name="description" content="Calculadora de cesta básica com margem de lucro, histórico e compartilhamento. Funciona offline.">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- ÍCONE PERSONALIZADO (Carrinho Azul) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232563eb%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🛒</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232563eb%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🛒</text></svg>">
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Cesta Básica">
@@ -195,7 +197,7 @@
             font-weight: 600; margin-bottom: 4px; padding: 0 2px;
         }
 
-        /* ALTERAÇÃO AQUI: Limite com R$ embutido */
+        /* Limite com R$ embutido */
         .limit-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; padding: 0 2px; }
         .limit-row label { font-size: 0.8rem; font-weight: bold; color: var(--text-light); }
         
@@ -206,7 +208,7 @@
             border: 1px solid var(--border);
             border-radius: 4px;
             padding: 0 6px;
-            width: 95px; /* Largura um pouco maior para caber o R$ */
+            width: 95px;
         }
         .input-with-prefix span {
             font-size: 0.75rem;
@@ -222,7 +224,7 @@
             padding: 4px 0;
             font-size: 14px;
             font-weight: bold;
-            text-align: right; /* Alinha o número à direita, colado no R$ */
+            text-align: right;
             color: var(--text-main);
         }
 
@@ -341,7 +343,6 @@
             <span id="countItems">Itens (un): 0</span>
         </div>
 
-        <!-- ALTERAÇÃO AQUI: Campo de Limite com R$ e vírgula -->
         <div class="limit-row">
             <label for="spendingLimit">Limite de Gasto</label>
             <div class="input-with-prefix">
@@ -468,25 +469,19 @@
     }
 
     document.getElementById('markupPercent').value = currentMarkup;
-    // Formata o limite inicial com vírgula
     document.getElementById('spendingLimit').value = currentLimit.toFixed(2).replace('.', ',');
 
-    // Função para formatar o campo de limite quando o usuário sair dele
     function formatLimitInput() {
         let val = document.getElementById('spendingLimit').value.replace(',', '.');
         let num = parseFloat(val);
         if (isNaN(num) || num < 0) num = 0;
-        
-        // Salva como número puro e exibe com vírgula
         document.getElementById('spendingLimit').value = num.toFixed(2).replace('.', ',');
         autoSave();
         updateTotals();
     }
 
     function autoSave() {
-        // Converte a string com vírgula de volta para número para salvar
         let limitVal = parseFloat(document.getElementById('spendingLimit').value.replace(',', '.')) || 0;
-        
         storage.set('cestaCurrentState', {
             items: items, nextId: nextId,
             markup: parseFloat(document.getElementById('markupPercent').value) || 0,
@@ -516,7 +511,6 @@
         }
     }
 
-    // --- CONTROLE DE SCROLL ---
     let lastScrollTop = 0;
     let isTyping = false; 
     const bottomPanel = document.getElementById('bottomPanel');
@@ -647,7 +641,6 @@
         if (markup < 0) markup = 0;
         const multiplier = 1 + (markup / 100);
         
-        // ALTERAÇÃO AQUI: Pega o limite, troca a vírgula por ponto para calcular
         let limitStr = limitInput.value.replace(',', '.');
         let limit = parseFloat(limitStr) || 0;
 
@@ -719,7 +712,6 @@
         const basketName = prompt("Dê um nome para esta cesta:", defaultName);
         if (!basketName) return;
 
-        // Salva o limite convertido como número para não dar erro no histórico
         let limitVal = parseFloat(limitInput.value.replace(',', '.')) || 0;
 
         const newBasket = {
@@ -771,7 +763,6 @@
         nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
         markupInput.value = basket.markup;
         
-        // Formata o limite carregado com vírgula
         let lim = basket.limit || 200;
         limitInput.value = lim.toFixed(2).replace('.', ',');
         
