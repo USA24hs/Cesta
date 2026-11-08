@@ -6,7 +6,6 @@
     <meta name="theme-color" content="#2563eb">
     <meta name="description" content="Calculadora de cesta básica com margem de lucro, histórico e compartilhamento. Funciona offline.">
     
-    <!-- ÍCONE PERSONALIZADO (Carrinho Azul) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232563eb%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🛒</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232563eb%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2260%22>🛒</text></svg>">
 
@@ -43,7 +42,7 @@
             color: var(--text-main);
         }
 
-        /* Topo fixo */
+        /* Topo */
         .header {
             background-color: var(--primary);
             color: white;
@@ -56,63 +55,37 @@
             align-items: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
         .header h1 { margin: 0; font-size: 1rem; font-weight: 600; }
         .header-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-
         .btn-header {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(255,255,255,0.2); color: white; border: none;
+            padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        /* Formulário */
+        /* Formulário Adicionar */
         .form-container {
-            background: var(--bg-card);
-            padding: 12px;
-            margin: 8px;
-            border-radius: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            animation: slideDown 0.3s ease-out;
+            background: var(--bg-card); padding: 12px; margin: 8px; border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); animation: slideDown 0.3s ease-out;
         }
         .form-container.hidden { display: none; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
         .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
         .input-group { display: flex; flex-direction: column; flex: 1; }
         .input-group label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 2px; font-weight: 600; }
         .input-group input { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; background: #f8fafc; }
         .btn-add { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
 
-        /* Lista de Itens Compacta */
+        /* Lista de Itens */
         .list-container { padding: 0 8px; }
-
         .empty-state { text-align: center; padding: 30px 20px; color: var(--text-light); font-size: 0.95rem; }
-
         .item-card {
-            background: var(--bg-card);
-            padding: 6px 8px;
-            margin-bottom: 4px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-            transition: all 0.2s;
-            cursor: pointer;
+            background: var(--bg-card); padding: 6px 8px; margin-bottom: 4px; border-radius: 8px;
+            display: flex; align-items: center; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            transition: all 0.2s; cursor: pointer;
         }
-
         .item-card.checked { opacity: 0.6; background: #f8fafc; }
         .item-card.checked .item-info { text-decoration: line-through; color: var(--text-light); }
-
-        /* Checkbox */
         .checkbox-wrapper { margin-right: 6px; display: flex; align-items: center; justify-content: center; }
         .custom-check {
             width: 20px; height: 20px; border: 2px solid var(--border);
@@ -122,30 +95,14 @@
         .item-card.checked .custom-check { background: var(--primary); border-color: var(--primary); }
         .item-card.checked .custom-check::after { content: "✓"; color: white; font-weight: bold; font-size: 12px; }
 
-        /* ALTERAÇÃO AQUI: Fontes 14px e 12px */
-        .item-info {
-            flex: 1;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-right: 4px;
-            gap: 2px;
-        }
-
+        .item-info { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; margin-right: 4px; gap: 2px; }
         .item-name { font-weight: 700; font-size: 14px; color: var(--text-main); line-height: 1.1; }
         .item-details { font-size: 12px; color: var(--text-light); font-weight: 500; line-height: 1.1; }
-
-        .item-price {
-            font-weight: 700; font-size: 14px; color: var(--text-main);
-            margin-right: 4px; min-width: 60px; text-align: right; /* Ajustado para fonte menor */
-        }
-
+        .item-price { font-weight: 700; font-size: 14px; color: var(--text-main); margin-right: 4px; min-width: 60px; text-align: right; }
         .item-actions { display: flex; flex-direction: row; gap: 2px; align-items: center; }
         .btn-icon {
             background: transparent; border: none; border-radius: 4px;
-            font-size: 0.85rem; padding: 4px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; padding: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
         .btn-icon:active { background: #e2e8f0; }
         .btn-edit { color: var(--primary); }
@@ -153,135 +110,145 @@
 
         /* Rodapé Fixo */
         .bottom-panel {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; border-top: 1px solid var(--border);
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
-            padding: 8px 12px; z-index: 20; border-radius: 16px 16px 0 0;
+            position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid var(--border);
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05); padding: 8px 12px; z-index: 20; border-radius: 16px 16px 0 0;
             transition: transform 0.3s ease-in-out;
         }
-
         .bottom-panel.hidden-panel { transform: translateY(100%); }
-
-        /* Margem */
-        .markup-row {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #f1f5f9; padding: 6px 10px; border-radius: 6px; margin-bottom: 6px;
-        }
-        
+        .markup-row { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 6px 10px; border-radius: 6px; margin-bottom: 6px; }
         .markup-suggested {
-            color: var(--success-text); background: var(--success-bg); font-weight: 700;
-            font-size: 0.75rem; padding: 3px 8px; border-radius: 10px; border: 1px solid var(--success);
-            display: inline-flex; align-items: center; gap: 4px;
+            color: var(--success-text); background: var(--success-bg); font-weight: 700; font-size: 0.75rem;
+            padding: 3px 8px; border-radius: 10px; border: 1px solid var(--success); display: inline-flex; align-items: center; gap: 4px;
         }
         .markup-suggested small { font-weight: 600; font-size: 0.65rem; opacity: 0.85; }
+        .markup-input-group { display: flex; align-items: center; gap: 8px; }
+        .markup-input-group label { font-weight: bold; font-size: 0.85rem; color: var(--text-main); }
+        .markup-row input { width: 65px; padding: 4px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; text-align: center; font-weight: bold; }
+        .counts-row { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); font-weight: 600; margin-bottom: 4px; padding: 0 2px; }
 
-        .markup-input-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .markup-input-group label {
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: var(--text-main);
-        }
-
-        .markup-row input {
-            width: 65px; padding: 4px; border: 1px solid var(--border);
-            border-radius: 4px; font-size: 14px; text-align: center; font-weight: bold;
-        }
-
-        .counts-row {
-            display: flex; justify-content: space-between;
-            font-size: 0.8rem; color: var(--text-light);
-            font-weight: 600; margin-bottom: 4px; padding: 0 2px;
-        }
-
-        /* Limite com R$ embutido */
         .limit-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; padding: 0 2px; }
         .limit-row label { font-size: 0.8rem; font-weight: bold; color: var(--text-light); }
-        
-        .input-with-prefix {
-            display: flex;
-            align-items: center;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 0 6px;
-            width: 95px;
-        }
-        .input-with-prefix span {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-right: 2px;
-        }
-        .input-with-prefix input {
-            width: 100%;
-            border: none;
-            outline: none;
-            background: transparent;
-            padding: 4px 0;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: right;
-            color: var(--text-main);
-        }
-
+        .input-with-prefix { display: flex; align-items: center; background: white; border: 1px solid var(--border); border-radius: 4px; padding: 0 6px; width: 95px; }
+        .input-with-prefix span { font-size: 0.75rem; font-weight: 700; color: var(--text-light); margin-right: 2px; }
+        .input-with-prefix input { width: 100%; border: none; outline: none; background: transparent; padding: 4px 0; font-size: 14px; font-weight: bold; text-align: right; color: var(--text-main); }
         .progress-container { height: 4px; background: #e2e8f0; border-radius: 2px; margin: 0 2px 2px 2px; overflow: hidden; }
         .progress-bar { height: 100%; width: 0%; background: var(--success); transition: width 0.3s, background-color 0.3s; }
         .limit-info { font-size: 0.7rem; font-weight: 600; text-align: right; padding: 0 2px; margin-bottom: 6px; color: var(--text-light); }
 
-        /* Grid de Resumo */
         .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 6px; }
         .summary-box { background: #f8fafc; padding: 4px 2px; border-radius: 6px; text-align: center; display: flex; flex-direction: column; }
         .summary-box span { display: block; font-size: 0.65rem; color: var(--text-light); margin-bottom: 2px; font-weight: 600; }
         .summary-box strong { font-size: 0.95rem; color: var(--text-main); }
-        
         .box-profit { background: var(--success-bg) !important; }
         .box-profit span { color: var(--success-text); }
         .box-profit strong { color: var(--success-text); }
-
-        .total-box {
-            background: var(--primary); color: white; padding: 6px 10px;
-            border-radius: 6px; display: flex; justify-content: space-between; align-items: center;
-        }
+        .total-box { background: var(--primary); color: white; padding: 6px 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
         .total-box span { font-size: 0.85rem; font-weight: 500; }
         .total-box strong { font-size: 1.2rem; }
 
-        /* Modais */
+        /* =========================================
+           MODAIS (VISUAL MODERNO E PROFISSIONAL)
+           ========================================= */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 50;
-            display: none; justify-content: center; align-items: flex-end;
+            background: rgba(15, 23, 42, 0.6); /* Cor mais escura e sofisticada */
+            backdrop-filter: blur(4px); /* Efeito de vidro */
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 50; display: none; justify-content: center; align-items: flex-end;
+            transition: opacity 0.3s ease;
         }
+        
         .modal-content {
             background: white; width: 100%; max-height: 85vh;
-            border-radius: 20px 20px 0 0; padding: 15px;
-            display: flex; flex-direction: column; animation: slideUp 0.3s ease-out;
+            border-radius: 24px 24px 0 0; padding: 20px 20px 30px 20px; /* Mais espaçamento */
+            display: flex; flex-direction: column; 
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Animação mais suave */
+            position: relative;
         }
+
+        /* Alça de arrastar (Drag handle) */
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 5px;
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-        .modal-header h2 { margin: 0; font-size: 1.1rem; }
-        .btn-close { background: none; border: none; font-size: 1.3rem; color: var(--text-light); cursor: pointer; }
+
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 10px; margin-bottom: 20px; padding-bottom: 0; border-bottom: none;
+        }
+        .modal-header h2 { margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
         
-        .history-list { overflow-y: auto; flex: 1; }
-        .history-item { border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        /* Botão fechar moderno (círculo cinza) */
+        .btn-close {
+            background: #f1f5f9; border: none; width: 32px; height: 32px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; color: var(--text-light); cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-close:active { background: #e2e8f0; }
+
+        /* Inputs dentro do modal mais elegantes */
+        .modal-content .form-row { margin-bottom: 16px; }
+        .modal-content .input-group label { color: var(--text-light); font-weight: 600; font-size: 0.8rem; margin-bottom: 6px; }
+        .modal-content .input-group input {
+            border-radius: 10px; padding: 14px; border: 1.5px solid var(--border);
+            font-size: 16px; background: #f8fafc; transition: all 0.2s;
+        }
+        .modal-content .input-group input:focus {
+            outline: none; border-color: var(--primary); background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .modal-content .btn-add {
+            border-radius: 10px; padding: 14px; font-size: 1.05rem;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+            transition: transform 0.1s;
+        }
+        .modal-content .btn-add:active { transform: scale(0.98); }
+
+        /* Lista de Histórico (Cards modernos) */
+        .history-list { overflow-y: auto; flex: 1; padding-right: 4px; }
+        .history-item {
+            border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+            background: white; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            transition: border-color 0.2s;
+        }
+        .history-item:hover { border-color: #cbd5e1; }
+        
         .history-info { flex: 1; min-width: 0; }
-        .history-info h3 { margin: 0 0 2px 0; font-size: 0.95rem; word-wrap: break-word; }
-        .history-info p { margin: 0; font-size: 0.8rem; color: var(--text-light); }
-        .history-actions { display: flex; flex-direction: column; gap: 4px; min-width: 70px; }
+        .history-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; font-weight: 700; color: var(--text-main); word-wrap: break-word; }
+        .history-info p { margin: 0; font-size: 0.8rem; color: var(--text-light); line-height: 1.4; }
         
-        .btn-load { background: var(--success); color: white; border: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
-        .btn-delete-history { background: var(--danger-bg); color: var(--danger); border: none; padding: 4px 10px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; cursor: pointer; }
+        .history-actions { display: flex; flex-direction: column; gap: 6px; min-width: 75px; }
+        .btn-load { 
+            background: var(--primary); color: white; border: none; padding: 8px 12px; 
+            border-radius: 8px; font-weight: bold; font-size: 0.8rem; cursor: pointer;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+        }
+        .btn-load:active { background: #1d4ed8; }
+        
+        .btn-delete-history { 
+            background: transparent; color: var(--danger); border: 1px solid var(--danger-bg); 
+            padding: 7px 12px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-delete-history:active { background: var(--danger-bg); }
 
         /* Toast */
         .toast {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: #1e293b; color: white; padding: 10px 16px;
-            border-radius: 8px; font-size: 0.85rem; font-weight: 600;
-            z-index: 100; opacity: 0; transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); max-width: 90vw; text-align: center;
+            background: #1e293b; color: white; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+            z-index: 100; opacity: 0; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.2); max-width: 90vw; text-align: center;
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         .toast.success { background: var(--success); }
@@ -326,12 +293,10 @@
 
     <!-- Painel Inferior -->
     <div class="bottom-panel" id="bottomPanel">
-        
         <div class="markup-row">
             <span class="markup-suggested">
                 <small>Margem Real</small> <span id="realMarginValue">33,77%</span>
             </span>
-            
             <div class="markup-input-group">
                 <label for="markupPercent">Margem (%)</label>
                 <input type="number" id="markupPercent" value="35" step="0.01" onchange="updateTotals()" oninput="updateTotals()" inputmode="decimal" placeholder="0">
@@ -376,7 +341,7 @@
         </div>
     </div>
 
-    <!-- Modais e Toast -->
+    <!-- Modal Editar -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -406,6 +371,7 @@
         </div>
     </div>
 
+    <!-- Modal Histórico -->
     <div class="modal-overlay" id="historyModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -735,7 +701,7 @@
         const historyList = document.getElementById('historyList');
         let history = storage.get('cestaHistory', []);
         if (history.length === 0) {
-            historyList.innerHTML = '<p style="text-align:center; color: var(--text-light); font-size:0.9rem; padding: 15px;">Nenhuma cesta salva.</p>';
+            historyList.innerHTML = '<p style="text-align:center; color: var(--text-light); font-size:0.9rem; padding: 20px;">Nenhuma cesta salva.</p>';
             return;
         }
         historyList.innerHTML = [...history].reverse().map(basket => `
@@ -743,7 +709,8 @@
                 <div class="history-info">
                     <h3>${escapeHTML(basket.name)}</h3>
                     <p>${escapeHTML(basket.date)}</p>
-                    <p>Custo: ${formatCurrency(basket.totalCost)} | Limite: ${formatCurrency(basket.limit || 0)}</p>
+                    <p style="margin-top: 4px; font-weight: 600; color: var(--primary);">Custo: ${formatCurrency(basket.totalCost)}</p>
+                    <p style="font-size: 0.75rem; opacity: 0.8;">Limite: ${formatCurrency(basket.limit || 0)}</p>
                 </div>
                 <div class="history-actions">
                     <button class="btn-load" onclick="loadBasket(${basket.id})">Abrir</button>
