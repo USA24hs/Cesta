@@ -171,7 +171,7 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 20px; }
-        .modal-header h2 { margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
+        .modal-header h2 { margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-main); }
         
         .btn-close {
             background: #f1f5f9; border: none; width: 32px; height: 32px;
@@ -195,7 +195,6 @@
         }
         .modal-content .btn-add:active { transform: scale(0.98); }
 
-        /* Botão Cancelar genérico */
         .btn-cancel {
             width: 100%; padding: 14px; background: #f1f5f9; color: var(--text-main);
             border: none; border-radius: 10px; font-size: 1.05rem; font-weight: bold; cursor: pointer;
@@ -365,7 +364,7 @@
         </div>
     </div>
 
-    <!-- Modal de Confirmação Genérico (NOVO) -->
+    <!-- Modal de Confirmação Genérico -->
     <div class="modal-overlay" id="confirmModal">
         <div class="modal-content" style="max-height: 50vh;">
             <div class="modal-header">
@@ -386,7 +385,7 @@
     <div class="modal-overlay" id="historyModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Minhas Cestas Salvas</h2>
+                <h2>Modelos de Cestas Básicas Salvas</h2>
                 <button class="btn-close" onclick="closeHistory()">✖</button>
             </div>
             <div class="history-list" id="historyList"></div>
@@ -534,9 +533,6 @@
         if (item) { item.checked = !item.checked; renderList(); autoSave(); }
     }
 
-    // ==========================================
-    // EXCLUSÃO DE ITEM COM MODAL CUSTOMIZADO
-    // ==========================================
     function deleteItem(id, event) {
         event.stopPropagation();
         showConfirm(
@@ -689,9 +685,6 @@
         });
     });
 
-    // ==========================================
-    // LÓGICA DO MODAL DE CONFIRMAÇÃO GENÉRICO
-    // ==========================================
     let confirmCallback = null;
     function showConfirm(title, message, btnText, btnColor, callback) {
         document.getElementById('confirmTitle').innerText = title;
@@ -701,7 +694,6 @@
         btn.innerText = btnText;
         btn.style.background = btnColor;
         
-        // Ajusta a cor da sombra do botão para combinar
         if(btnColor === 'var(--danger)') btn.style.boxShadow = '0 4px 10px rgba(239, 68, 68, 0.25)';
         else btn.style.boxShadow = '0 4px 10px rgba(37, 99, 235, 0.25)';
 
@@ -722,7 +714,7 @@
     });
 
     // ==========================================
-    // SALVAR CESTA
+    // SALVAR CESTA COM LUCRO
     // ==========================================
     function saveBasket() {
         if (items.length === 0) { showToast('Não há itens para salvar.', 'error'); return; }
@@ -743,13 +735,21 @@
         if (!basketName) { showToast('Informe um nome para a cesta.', 'error'); return; }
 
         let limitVal = parseFloat(limitInput.value.replace(',', '.')) || 0;
+        
+        // Cálculo do Lucro no momento de salvar
+        let markup = parseFloat(markupInput.value) || 0;
+        const multiplier = 1 + (markup / 100);
+        const totalCost = items.reduce((acc, curr) => acc + (curr.cost * curr.qty), 0);
+        const totalSell = totalCost * multiplier;
+        const totalProfit = totalSell - totalCost;
 
         const newBasket = {
             id: Date.now(), name: basketName,
             date: new Date().toLocaleString('pt-BR'),
             items: JSON.parse(JSON.stringify(items)),
             markup: markupInput.value, limit: limitVal,
-            totalCost: items.reduce((acc, curr) => acc + (curr.cost * curr.qty), 0)
+            totalCost: totalCost,
+            totalProfit: totalProfit // Salvando o lucro
         };
 
         let history = storage.get('cestaHistory', []);
@@ -763,12 +763,12 @@
         }
     }
 
-    // ==========================================
-    // HISTÓRICO E EXCLUSÃO DE CESTA
-    // ==========================================
     function openHistory() { renderHistory(); openModal('historyModal'); }
     function closeHistory() { closeModal('historyModal'); }
 
+    // ==========================================
+    // RENDERIZAR HISTÓRICO (CUSTO E LUCRO NA MESMA LINHA)
+    // ==========================================
     function renderHistory() {
         const historyList = document.getElementById('historyList');
         let history = storage.get('cestaHistory', []);
@@ -781,8 +781,14 @@
                 <div class="history-info">
                     <h3>${escapeHTML(basket.name)}</h3>
                     <p>${escapeHTML(basket.date)}</p>
-                    <p style="margin-top: 4px; font-weight: 600; color: var(--primary);">Custo: ${formatCurrency(basket.totalCost)}</p>
-                    <p style="font-size: 0.75rem; opacity: 0.8;">Limite: ${formatCurrency(basket.limit || 0)}</p>
+                    
+                    <!-- Linha única para Custo e Lucro -->
+                    <div style="display: flex; gap: 12px; margin-top: 6px; font-weight: 600; font-size: 0.85rem;">
+                        <span style="color: var(--primary);">Custo: ${formatCurrency(basket.totalCost)}</span>
+                        <span style="color: var(--success-text);">Lucro: ${formatCurrency(basket.totalProfit || 0)}</span>
+                    </div>
+
+                    <p style="font-size: 0.75rem; opacity: 0.8; margin-top: 4px;">Limite: ${formatCurrency(basket.limit || 0)}</p>
                 </div>
                 <div class="history-actions">
                     <button class="btn-load" onclick="loadBasket(${basket.id})">Abrir</button>
@@ -797,7 +803,6 @@
         const basket = history.find(b => b.id === id);
         if (!basket) return;
 
-        // Confirmação para substituir a lista atual
         if (items.length > 0) {
             showConfirm(
                 'Abrir Cesta',
@@ -826,7 +831,6 @@
         showToast('Cesta carregada.', 'success');
     }
 
-    // EXCLUSÃO DE CESTA COM MODAL CUSTOMIZADO
     function deleteBasket(id) {
         showConfirm(
             'Excluir Cesta',
